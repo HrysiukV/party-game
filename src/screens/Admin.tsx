@@ -35,9 +35,89 @@ function Admin({
 }: Props) {
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
-  const [type, setType] = useState<
-    "truth" | "dare" | "penalty"
-  >("truth");
+  const [type, setType] = useState<"truth" | "dare" | "penalty">("truth");
+
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
+
+  function renderItem(
+    item: Item,
+    onDelete: (id: string) => void,
+    onSave: (text: string) => void
+  ) {
+    const isEditing = editId === item.id;
+
+    return (
+      <div
+        key={item.id}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 8,
+          padding: 6,
+          border: "1px solid #333",
+          borderRadius: 8,
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          {isEditing ? (
+            <input
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          ) : (
+            <span>{item.text}</span>
+          )}
+        </div>
+
+        <div style={{ display: "flex", gap: 6 }}>
+          {isEditing ? (
+            <>
+              <button
+                onClick={() => {
+                  if (!editText.trim()) return;
+
+                  onDelete(item.id);
+                  onSave(editText.trim());
+
+                  setEditId(null);
+                  setEditText("");
+                }}
+              >
+                💾
+              </button>
+
+              <button
+                onClick={() => {
+                  setEditId(null);
+                  setEditText("");
+                }}
+              >
+                ❌
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => {
+                  setEditId(item.id);
+                  setEditText(item.text);
+                }}
+              >
+                ✏️
+              </button>
+
+              <button onClick={() => onDelete(item.id)}>
+                🗑
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app">
@@ -46,12 +126,7 @@ function Admin({
       <select
         value={type}
         onChange={(e) =>
-          setType(
-            e.target.value as
-              | "truth"
-              | "dare"
-              | "penalty"
-          )
+          setType(e.target.value as "truth" | "dare" | "penalty")
         }
       >
         <option value="truth">🧠 Правда</option>
@@ -69,110 +144,62 @@ function Admin({
         onClick={() => {
           if (!text.trim()) return;
 
-          if (type === "truth") {
-            addTruth(text.trim());
-          } else if (type === "dare") {
-            addDare(text.trim());
-          } else {
-            addPenalty(text.trim());
-          }
+          if (type === "truth") addTruth(text.trim());
+          if (type === "dare") addDare(text.trim());
+          if (type === "penalty") addPenalty(text.trim());
 
           setText("");
         }}
       >
         ➕ Додати
       </button>
+
       <hr />
 
-<input
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-  placeholder="🔍 Пошук..."
-/>
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="🔍 Пошук..."
+      />
 
-<p>
-  🧠 {truths.length} | 🔥 {dares.length} | ⚠️ {penalties.length}
-</p>
-<hr />
+      <p>
+        🧠 {truths.length} | 🔥 {dares.length} | ⚠️ {penalties.length}
+      </p>
 
-<h2>🧠 Правда</h2>
+      <hr />
 
-{truths
-  .filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase())
-  )
-  .map((item) => (
-    <div
-      key={item.id}
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 8,
-      }}
-    >
-      <span>{item.text}</span>
+      <h2>🧠 Правда</h2>
+      {truths
+        .filter((i) =>
+          i.text.toLowerCase().includes(search.toLowerCase())
+        )
+        .map((item) =>
+          renderItem(item, deleteTruth, addTruth)
+        )}
 
-      <button onClick={() => deleteTruth(item.id)}>
-        🗑
-      </button>
-    </div>
-  ))}
+      <hr />
 
-<hr />
+      <h2>🔥 Дія</h2>
+      {dares
+        .filter((i) =>
+          i.text.toLowerCase().includes(search.toLowerCase())
+        )
+        .map((item) =>
+          renderItem(item, deleteDare, addDare)
+        )}
 
-<h2>🔥 Дія</h2>
+      <hr />
 
-{dares
-  .filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase())
-  )
-  .map((item) => (
-    <div
-      key={item.id}
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 8,
-      }}
-    >
-      <span>{item.text}</span>
+      <h2>⚠️ Штраф</h2>
+      {penalties
+        .filter((i) =>
+          i.text.toLowerCase().includes(search.toLowerCase())
+        )
+        .map((item) =>
+          renderItem(item, deletePenalty, addPenalty)
+        )}
 
-      <button onClick={() => deleteDare(item.id)}>
-        🗑
-      </button>
-    </div>
-  ))}
-
-<hr />
-
-<h2>⚠️ Штраф</h2>
-
-{penalties
-  .filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase())
-  )
-  .map((item) => (
-    <div
-      key={item.id}
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 8,
-      }}
-    >
-      <span>{item.text}</span>
-
-      <button onClick={() => deletePenalty(item.id)}>
-        🗑
-      </button>
-    </div>
-  ))}
-
-
-      <button onClick={goBack}>
+      <button onClick={goBack} style={{ marginTop: 20 }}>
         ⬅ Назад
       </button>
     </div>

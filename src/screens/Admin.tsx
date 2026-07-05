@@ -170,36 +170,15 @@ console.log("truths:", truths);
 
       <hr />
 
-      <h2>🧠 Правда</h2>
-{truths
-  .filter((i) =>
-    i.text.toLowerCase().includes(search.toLowerCase())
-  )
-  .map((item) =>
-    renderItem(item, deleteTruth, updateTruth)
-  )}
+      <h2>TEST</h2>
 
-<hr />
-
-<h2>🔥 Дія</h2>
-{dares
-  .filter((i) =>
-    i.text.toLowerCase().includes(search.toLowerCase())
-  )
-  .map((item) =>
-    renderItem(item, deleteDare, updateDare)
-  )}
-
-<hr />
-
-<h2>⚠️ Штраф</h2>
-{penalties
-  .filter((i) =>
-    i.text.toLowerCase().includes(search.toLowerCase())
-  )
-  .map((item) =>
-    renderItem(item, deletePenalty, updatePenalty)
-  )}
+{truths.map((item) => (
+  <div key={item.id} style={{ border: "1px solid red", margin: 5 }}>
+    ID: {item.id}
+    <br />
+    TEXT: {item.text}
+  </div>
+))}
 
       <button onClick={goBack} style={{ marginTop: 20 }}>
         ⬅ Назад

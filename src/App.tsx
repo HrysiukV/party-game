@@ -16,8 +16,18 @@ import {
 
 import { db } from "./services/firebase";
 
-const userId = crypto.randomUUID();
-  
+const tg = (window as any).Telegram?.WebApp;
+
+tg?.ready();
+tg?.expand();
+
+const userId =
+  tg?.initDataUnsafe?.user?.id?.toString() ??
+  crypto.randomUUID();
+
+console.log("Telegram ID:", userId);
+alert("Telegram ID: " + userId);
+
 function App() {
   // UI
   const [screen, setScreen] = useState<"room" | "players" | "game">("room");

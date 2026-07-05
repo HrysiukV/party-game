@@ -47,6 +47,10 @@ function Admin({
   const [editId, setEditId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
 
+  console.log("truths:", truths);
+console.log("dares:", dares);
+console.log("penalties:", penalties);
+
   function renderItem(
   item: Item,
   onDelete: (id: string) => void,

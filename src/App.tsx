@@ -83,48 +83,32 @@ const currentPlayer =
   const isMyTurn = currentPlayerId === userId;
 
   // REALTIME LISTENER
- useEffect(() => {
+useEffect(() => {
   const unsubTruths = onSnapshot(collection(db, "truths"), (snapshot) => {
     setTruths(
-      snapshot.docs.map((doc) => {
-        const data = doc.data();
-
-        console.log("TRUTH DOC:", data); // 👈 ОЦЕ ДОДАЛА
-
-        return {
-          id: doc.id,
-          text: data.text || "",
-        };
-      })
+      snapshot.docs.map((doc) => ({
+        id: doc.id,
+        text: doc.data().text || "",
+      }))
     );
   });
 
   const unsubDares = onSnapshot(collection(db, "dares"), (snapshot) => {
-   setDares(
-  snapshot.docs.map((d) => {
-    const data = d.data();
-    console.log("DARE DOC:", data);
-
-    return {
-      id: d.id,
-      text: data.text || "",
-    };
-  })
-);
+    setDares(
+      snapshot.docs.map((doc) => ({
+        id: doc.id,
+        text: doc.data().text || "",
+      }))
+    );
   });
 
   const unsubPenalties = onSnapshot(collection(db, "penalties"), (snapshot) => {
-   setPenalties(
-  snapshot.docs.map((d) => {
-    const data = d.data();
-    console.log("PENALTY DOC:", data);
-
-    return {
-      id: d.id,
-      text: data.text || "",
-    };
-  })
-);
+    setPenalties(
+      snapshot.docs.map((doc) => ({
+        id: doc.id,
+        text: doc.data().text || "",
+      }))
+    );
   });
 
   return () => {

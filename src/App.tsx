@@ -227,7 +227,11 @@ const currentPlayer =
   }
 
   if (screen === "players") {
-    return (
+    function goBack() {
+  setScreen("room");
+  setRoom(null);
+}
+return (
       <Players
   room={room}
   name={name}
@@ -235,6 +239,7 @@ const currentPlayer =
   players={players}
   addPlayer={addPlayer}
   startGame={startGame}
+  goBack={goBack}
 />
     );
   }

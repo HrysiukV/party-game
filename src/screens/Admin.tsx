@@ -1,13 +1,26 @@
 import { useState } from "react";
 
+type Item = {
+  id: string;
+  text: string;
+};
+
 type Props = {
+  truths: Item[];
+  dares: Item[];
+  penalties: Item[];
+
   addTruth: (text: string) => void;
   addDare: (text: string) => void;
   addPenalty: (text: string) => void;
+
   goBack: () => void;
 };
 
 function Admin({
+  truths,
+  dares,
+  penalties,
   addTruth,
   addDare,
   addPenalty,
@@ -61,7 +74,29 @@ function Admin({
       >
         ➕ Додати
       </button>
+<hr />
 
+<h2>🧠 Правда</h2>
+
+{truths.map((item) => (
+  <p key={item.id}>{item.text}</p>
+))}
+
+<hr />
+
+<h2>🔥 Дія</h2>
+
+{dares.map((item) => (
+  <p key={item.id}>{item.text}</p>
+))}
+
+<hr />
+
+<h2>⚠️ Штраф</h2>
+
+{penalties.map((item) => (
+  <p key={item.id}>{item.text}</p>
+))}
       <button onClick={goBack}>
         ⬅ Назад
       </button>

@@ -295,9 +295,14 @@ return (
 if (screen === "admin") {
   return (
     <Admin
+      truths={truths}
+      dares={dares}
+      penalties={penalties}
+
       addTruth={addTruth}
       addDare={addDare}
       addPenalty={addPenalty}
+
       goBack={() => setScreen("room")}
     />
   );

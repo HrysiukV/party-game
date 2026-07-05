@@ -53,7 +53,7 @@ function Admin({
   onUpdate: (id: string, text: string) => void
 ) {
   const isEditing = editId === item.id;
-
+console.log("truths:", truths);
   return (
     <div
       style={{

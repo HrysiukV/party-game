@@ -35,8 +35,8 @@ function App() {
   name: string;
 };
 
-const [players, setPlayers] = useState<Player[]>([]);
-const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(null);
+const [players] = useState<Player[]>([]);
+const [currentPlayerId] = useState<string | null>(null);
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);

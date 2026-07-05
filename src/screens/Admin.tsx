@@ -76,7 +76,7 @@ function Admin({
           />
         ) : (
           <span style={{ wordBreak: "break-word" }}>
-            {item.text}
+            {item.text || "❌ NO TEXT"}
           </span>
         )}
       </div>

@@ -22,10 +22,6 @@ const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
   crypto.randomUUID();
 
-const userName =
-  tg?.initDataUnsafe?.user?.first_name ??
-  "Гравець";
-
 const isAdmin = userId === "846617693";
 
 function App() {

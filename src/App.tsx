@@ -16,26 +16,6 @@ import {
 
 import { db } from "./services/firebase";
 
-const truths = [
-  "Який твій найбільший секрет?",
-  "Кому з компанії ти найбільше довіряєш?",
-  "Твоя найбільша фейл-історія?",
-];
-
-const dares = [
-  "Станцюй 10 секунд 💃",
-  "Заспівай приспів пісні 🎤",
-  "Зроби смішне селфі 🤳",
-];
-
-const penalties = [
-  "Випий 1 ковток 🍺",
-  "Випий 2 ковтки 🍻",
-  "Пропусти хід ⛔",
-  "Зроби смішне селфі 🤳",
-  "Виконай танець 10 секунд 💃",
-];
-
 const userId = crypto.randomUUID();
   
 function App() {
@@ -55,9 +35,9 @@ function App() {
   name: string;
 };
 
-const [players, setPlayers] = useState<Player[]>([]);
+const [players] = useState<Player[]>([]);
 
-  const [currentPlayerId, setCurrentPlayerId] =  useState<string | null>(null);
+  const [currentPlayerId] =  useState<string | null>(null);
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);
@@ -66,9 +46,6 @@ const [name, setName] = useState("");
 const [truths, setTruths] = useState<string[]>([]);
 const [dares, setDares] = useState<string[]>([]);
 const [penalties, setPenalties] = useState<string[]>([]);
-
-const [adminText, setAdminText] = useState("");
-const [adminType, setAdminType] = useState<"truth" | "dare">("truth");
 
 const currentPlayer =
   players.find(

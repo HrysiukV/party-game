@@ -56,7 +56,6 @@ function Admin({
 
   return (
     <div
-      key={item.id}
       style={{
         display: "flex",
         justifyContent: "space-between",
@@ -76,7 +75,7 @@ function Admin({
           />
         ) : (
           <span style={{ wordBreak: "break-word" }}>
-            {item.text || "❌ NO TEXT"}
+            {item.text}
           </span>
         )}
       </div>
@@ -97,12 +96,7 @@ function Admin({
               💾
             </button>
 
-            <button
-              onClick={() => {
-                setEditId(null);
-                setEditText("");
-              }}
-            >
+            <button onClick={() => setEditId(null)}>
               ❌
             </button>
           </>

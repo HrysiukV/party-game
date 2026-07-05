@@ -1,5 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+
+import Room from "./screens/Room";
+import Players from "./screens/Players";
+import Game from "./screens/Game";
+
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  onSnapshot,
+} from "firebase/firestore";
+
+import { db } from "./services/firebase";
 
 const truths = [
   "Який твій найбільший секрет?",
@@ -22,202 +37,185 @@ const penalties = [
 ];
 
 function App() {
-  // 🎮 навігація екранів
-  const [screen, setScreen] = useState("room");
+  // UI
+  const [screen, setScreen] = useState<"room" | "players" | "game">("room");
 
-  // 🏠 кімната
+  // ROOM
   const [room, setRoom] = useState<string | null>(null);
   const [roomInput, setRoomInput] = useState("");
 
-  // 👥 гравці
-  const [players, setPlayers] = useState<string[]>([]);
+  // PLAYER
   const [name, setName] = useState("");
 
-  // 🎲 гра
+  // GAME STATE (SYNC FIREBASE)
+  const [players, setPlayers] = useState<string[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
+const [showJoin, setShowJoin] = useState(false);
+  // REALTIME LISTENER
+  useEffect(() => {
+    if (!room) return;
 
-  // 🏠 кімната
-  function createRoom() {
+    const roomRef = doc(db, "rooms", room);
+
+    const unsub = onSnapshot(roomRef, (snap) => {
+      const data = snap.data();
+      if (!data) return;
+
+      setPlayers(data.players || []);
+      setCurrentPlayer(data.currentPlayer || null);
+      setCard(data.card || null);
+      setPenalty(data.penalty || null);
+    });
+
+    return () => unsub();
+  }, [room]);
+
+  // CREATE ROOM
+  async function createRoom() {
     const code = Math.random().toString(36).substring(2, 7).toUpperCase();
+
+    await setDoc(doc(db, "rooms", code), {
+      players: [],
+      currentPlayer: null,
+      card: null,
+      penalty: null,
+      createdAt: Date.now(),
+    });
+
     setRoom(code);
     setScreen("players");
   }
 
-  function joinRoom() {
-    if (roomInput.trim() === "") return;
-    setRoom(roomInput.toUpperCase());
+  // JOIN ROOM (FIXED)
+  async function joinRoom() {
+    const code = roomInput.trim().toUpperCase();
+
+    if (!code) {
+      alert("Введи код кімнати");
+      return;
+    }
+
+    const roomRef = doc(db, "rooms", code);
+    const roomSnap = await getDoc(roomRef);
+
+    if (!roomSnap.exists()) {
+      alert("Кімната не знайдена");
+      return;
+    }
+
+    setRoom(code);
     setScreen("players");
   }
 
-  // 👥 гравці
-  function addPlayer() {
-    if (name.trim() === "") return;
-    setPlayers([...players, name]);
+  // ADD PLAYER
+  async function addPlayer() {
+    if (!room || !name.trim()) return;
+
+    await updateDoc(doc(db, "rooms", room), {
+      players: arrayUnion(name),
+    });
+
     setName("");
   }
 
-  // 🎮 старт гри
-  function startGame() {
-    const random =
-      players[Math.floor(Math.random() * players.length)];
-    setCurrentPlayer(random);
+  // START GAME
+  async function startGame() {
+    if (!room || players.length === 0) return;
+
+    const random = players[Math.floor(Math.random() * players.length)];
+
+    await updateDoc(doc(db, "rooms", room), {
+      currentPlayer: random,
+    });
+
     setScreen("game");
-    setCard(null);
-    setPenalty(null);
   }
 
-  // 🎲 наступний хід
-  function nextTurn() {
-    const random =
-      players[Math.floor(Math.random() * players.length)];
-    setCurrentPlayer(random);
-    setCard(null);
-    setPenalty(null);
+  // NEXT TURN
+  async function nextTurn() {
+    if (!room || players.length === 0) return;
+
+    const random = players[Math.floor(Math.random() * players.length)];
+
+    await updateDoc(doc(db, "rooms", room), {
+      currentPlayer: random,
+      card: null,
+      penalty: null,
+    });
   }
 
-  // 🃏 карта
-  function drawCard() {
+  // DRAW CARD
+  async function drawCard() {
+    if (!room) return;
+
     const type = Math.random() < 0.5 ? "truth" : "dare";
 
-    if (type === "truth") {
-      const random =
-        truths[Math.floor(Math.random() * truths.length)];
-      setCard(`🧠 ПРАВДА\n\n${random}`);
-    } else {
-      const random =
-        dares[Math.floor(Math.random() * dares.length)];
-      setCard(`🔥 ДІЯ\n\n${random}`);
-    }
+    const text =
+      type === "truth"
+        ? `🧠 ПРАВДА\n\n${truths[Math.floor(Math.random() * truths.length)]}`
+        : `🔥 ДІЯ\n\n${dares[Math.floor(Math.random() * dares.length)]}`;
+
+    await updateDoc(doc(db, "rooms", room), {
+      card: text,
+      penalty: null,
+    });
   }
 
-  // ❌ відмова
-  function refuse() {
+  // REFUSE
+  async function refuse() {
+    if (!room) return;
+
     const random =
       penalties[Math.floor(Math.random() * penalties.length)];
 
-    setPenalty("⚠️ ШТРАФ:\n\n" + random);
-    setCard(null);
+    await updateDoc(doc(db, "rooms", room), {
+      penalty: "⚠️ ШТРАФ:\n\n" + random,
+      card: null,
+    });
   }
 
-  // 🏠 КІМНАТА
+  // SCREENS
   if (screen === "room") {
     return (
-      <div className="app">
-        <h1>🏠 AFTER</h1>
-        <p>Створіть або приєднайтесь до кімнати</p>
-
-        <button onClick={createRoom}>
-          Створити кімнату
-        </button>
-
-        <input
-          value={roomInput}
-          onChange={(e) => setRoomInput(e.target.value)}
-          placeholder="Код кімнати"
-        />
-
-        <button onClick={joinRoom}>
-          Приєднатись
-        </button>
-      </div>
+      <Room
+  roomInput={roomInput}
+  setRoomInput={setRoomInput}
+  createRoom={createRoom}
+  joinRoom={joinRoom}
+  showJoin={showJoin}
+  setShowJoin={setShowJoin}
+/>
     );
   }
 
-  // 👥 ГРАВЦІ
   if (screen === "players") {
     return (
-      <div className="app">
-        <h1>Гравці</h1>
-
-        {room && <p>Кімната: {room}</p>}
-
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Ім'я гравця"
-        />
-
-        <button onClick={addPlayer}>
-          Додати
-        </button>
-
-        <div>
-          {players.map((p, i) => (
-            <p key={i}>👤 {p}</p>
-          ))}
-        </div>
-
-        <button onClick={startGame}>
-          Почати гру
-        </button>
-      </div>
+      <Players
+        room={room}
+        name={name}
+        setName={setName}
+        players={players}
+        addPlayer={addPlayer}
+        startGame={startGame}
+      />
     );
   }
 
-  // 🎮 ГРА
   if (screen === "game") {
     return (
-      <div className="app">
-        <h1>🎮 Хід: {currentPlayer}</h1>
-
-        {!card && !penalty && (
-          <button onClick={drawCard}>
-            Витягнути карту 🎲
-          </button>
-        )}
-
-        {card && (
-          <div className="card">
-            <h2 style={{ whiteSpace: "pre-line" }}>
-              {card}
-            </h2>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-  <button
-    onClick={() => {
-      setCard(null);
-      nextTurn();
-    }}
-  >
-    Виконано ✅
-  </button>
-
-  <button onClick={refuse}>
-    Відмовляюсь ❌
-  </button>
-</div>
-          </div>
-        )}
-
-        {penalty && (
-          <div className="card">
-            <h2 style={{ whiteSpace: "pre-line" }}>
-              {penalty}
-            </h2>
-
-            <button
-              onClick={() => {
-                setPenalty(null);
-                nextTurn();
-              }}
-            >
-              Ок, далі ➜
-            </button>
-          </div>
-        )}
-
-        {!card && !penalty && (
-          <button onClick={nextTurn}>
-            Наступний гравець ➜
-          </button>
-        )}
-
-        <button onClick={() => setScreen("room")}>
-          Вийти
-        </button>
-      </div>
+      <Game
+        currentPlayer={currentPlayer}
+        card={card}
+        penalty={penalty}
+        drawCard={drawCard}
+        refuse={refuse}
+        nextTurn={nextTurn}
+        setCard={setCard}
+        setPenalty={setPenalty}
+        setScreen={setScreen}
+      />
     );
   }
 

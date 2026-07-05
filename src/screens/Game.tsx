@@ -1,47 +1,94 @@
+type Screen = "room" | "players" | "game";
+
 type Props = {
-  room: string | null;
-  name: string;
-  setName: (value: string) => void;
-  players: string[];
-  addPlayer: () => void;
-  startGame: () => void;
+  currentPlayer: string | null;
+  card: string | null;
+  penalty: string | null;
+  drawCard: () => void;
+  refuse: () => void;
+  nextTurn: () => void;
+  setCard: React.Dispatch<React.SetStateAction<string | null>>;
+  setPenalty: React.Dispatch<React.SetStateAction<string | null>>;
+  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
 };
 
-function Players({
-  room,
-  name,
-  setName,
-  players,
-  addPlayer,
-  startGame,
+function Game({
+  currentPlayer,
+  card,
+  penalty,
+  drawCard,
+  refuse,
+  nextTurn,
+  setCard,
+  setPenalty,
+  setScreen,
 }: Props) {
   return (
     <div className="app">
-      <h1>Гравці</h1>
+      <h1>🎮 Хід: {currentPlayer}</h1>
 
-      {room && <p>Кімната: {room}</p>}
+      {/* Кнопка витягнути карту */}
+      {!card && !penalty && (
+        <button onClick={drawCard}>
+          Витягнути карту 🎲
+        </button>
+      )}
 
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Ім'я гравця"
-      />
+      {/* КАРТА */}
+      {card && (
+        <div className="card">
+          <h2 style={{ whiteSpace: "pre-line" }}>
+            {card}
+          </h2>
 
-      <button onClick={addPlayer}>
-        Додати
-      </button>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <button
+              onClick={() => {
+                setCard(null);
+                nextTurn();
+              }}
+            >
+              Виконано ✅
+            </button>
 
-      <div>
-        {players.map((player, index) => (
-          <p key={index}>👤 {player}</p>
-        ))}
-      </div>
+            <button onClick={refuse}>
+              Відмовляюсь ❌
+            </button>
+          </div>
+        </div>
+      )}
 
-      <button onClick={startGame}>
-        Почати гру
+      {/* ШТРАФ */}
+      {penalty && (
+        <div className="card">
+          <h2 style={{ whiteSpace: "pre-line" }}>
+            {penalty}
+          </h2>
+
+          <button
+            onClick={() => {
+              setPenalty(null);
+              nextTurn();
+            }}
+          >
+            Ок, далі ➜
+          </button>
+        </div>
+      )}
+
+      {/* Наступний хід */}
+      {!card && !penalty && (
+        <button onClick={nextTurn}>
+          Наступний гравець ➜
+        </button>
+      )}
+
+      {/* Вихід */}
+      <button onClick={() => setScreen("room")}>
+        Вийти
       </button>
     </div>
   );
 }
 
-export default Players;
+export default Game;

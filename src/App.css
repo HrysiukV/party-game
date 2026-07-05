@@ -72,6 +72,26 @@ button:hover {
 
   transform-origin: center;
 }
+input {
+  width: 280px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+
+  background: #1c1c26;
+  color: white;
+
+  font-size: 16px;
+  outline: none;
+}
+
+input::placeholder {
+  color: #888;
+}
+
+input:focus {
+  box-shadow: 0 0 0 2px #4f46e5;
+}
 
 @keyframes pop {
   0% {

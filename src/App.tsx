@@ -25,8 +25,7 @@ const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
   crypto.randomUUID();
 
-console.log("Telegram ID:", userId);
-alert("Telegram ID: " + userId);
+alert(JSON.stringify(tg?.initDataUnsafe));
 
 function App() {
   // UI

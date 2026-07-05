@@ -63,6 +63,13 @@ const [players, setPlayers] = useState<Player[]>([]);
 const [showJoin, setShowJoin] = useState(false);
 const [name, setName] = useState("");
 
+const [truths, setTruths] = useState<string[]>([]);
+const [dares, setDares] = useState<string[]>([]);
+const [penalties, setPenalties] = useState<string[]>([]);
+
+const [adminText, setAdminText] = useState("");
+const [adminType, setAdminType] = useState<"truth" | "dare">("truth");
+
 const currentPlayer =
   players.find(
     (player) => player.id === currentPlayerId
@@ -71,23 +78,28 @@ const currentPlayer =
   const isMyTurn = currentPlayerId === userId;
 
   // REALTIME LISTENER
-  useEffect(() => {
-    if (!room) return;
+ useEffect(() => {
+  const unsubTruths = onSnapshot(doc(db, "global", "truths"), (snap) => {
+    const data = snap.data();
+    setTruths(data?.items?.map((i: any) => i.text) || []);
+  });
 
-    const roomRef = doc(db, "rooms", room);
+  const unsubDares = onSnapshot(doc(db, "global", "dares"), (snap) => {
+    const data = snap.data();
+    setDares(data?.items?.map((i: any) => i.text) || []);
+  });
 
-    const unsub = onSnapshot(roomRef, (snap) => {
-      const data = snap.data();
-      if (!data) return;
+  const unsubPenalties = onSnapshot(doc(db, "global", "penalties"), (snap) => {
+    const data = snap.data();
+    setPenalties(data?.items?.map((i: any) => i.text) || []);
+  });
 
-      setPlayers(data.players || []);
-      setCurrentPlayerId(data.currentPlayerId || null);
-      setCard(data.card || null);
-      setPenalty(data.penalty || null);
-    });
-
-    return () => unsub();
-  }, [room]);
+  return () => {
+    unsubTruths();
+    unsubDares();
+    unsubPenalties();
+  };
+}, []);
 
   // CREATE ROOM
   async function createRoom() {
@@ -99,6 +111,24 @@ const currentPlayer =
   currentPlayerId: null,
   card: null,
   penalty: null,
+
+  truths: [
+    "Який твій найбільший секрет?",
+    "Кому з компанії ти найбільше довіряєш?",
+    "Твоя найбільша фейл-історія?"
+  ],
+
+  dares: [
+    "Станцюй 10 секунд 💃",
+    "Заспівай приспів пісні 🎤",
+    "Зроби смішне селфі 🤳"
+  ],
+  penalties: [
+  "Випий 1 ковток 🍺",
+  "Випий 2 ковтки 🍻",
+  "Пропусти хід ⛔"
+],
+
   createdAt: Date.now(),
 });
 
@@ -184,33 +214,72 @@ const currentPlayer =
 
   // DRAW CARD
   async function drawCard() {
-    if (!room) return;
+  if (!room) return;
 
-    const type = Math.random() < 0.5 ? "truth" : "dare";
+  const type = Math.random() < 0.5 ? "truth" : "dare";
 
-    const text =
-      type === "truth"
-        ? `🧠 ПРАВДА\n\n${truths[Math.floor(Math.random() * truths.length)]}`
-        : `🔥 ДІЯ\n\n${dares[Math.floor(Math.random() * dares.length)]}`;
+  const text =
+    type === "truth"
+      ? `🧠 ПРАВДА\n\n${truths[Math.floor(Math.random() * truths.length)]}`
+      : `🔥 ДІЯ\n\n${dares[Math.floor(Math.random() * dares.length)]}`;
 
-    await updateDoc(doc(db, "rooms", room), {
-      card: text,
-      penalty: null,
-    });
-  }
+  await updateDoc(doc(db, "rooms", room), {
+    card: text,
+    penalty: null,
+  });
+}
 
   // REFUSE
   async function refuse() {
-    if (!room) return;
+  if (!room) return;
 
-    const random =
-      penalties[Math.floor(Math.random() * penalties.length)];
+  const random =
+    penalties[Math.floor(Math.random() * penalties.length)];
 
-    await updateDoc(doc(db, "rooms", room), {
-      penalty: "⚠️ ШТРАФ:\n\n" + random,
-      card: null,
-    });
-  }
+  await updateDoc(doc(db, "rooms", room), {
+    penalty: "⚠️ ШТРАФ:\n\n" + random,
+    card: null,
+  });
+}
+
+async function addTruth(text: string) {
+  const ref = doc(db, "global", "truths");
+
+  await updateDoc(ref, {
+    items: arrayUnion({
+      id: crypto.randomUUID(),
+      text,
+    }),
+  });
+}
+
+async function addDare(text: string) {
+  const ref = doc(db, "global", "dares");
+
+  const snap = await getDoc(ref);
+  const data = snap.data();
+
+  await updateDoc(ref, {
+    items: [
+      ...(data?.items || []),
+      { id: crypto.randomUUID(), text }
+    ]
+  });
+}
+async function addPenalty(text: string) {
+  const ref = doc(db, "global", "penalties");
+
+  const snap = await getDoc(ref);
+  const data = snap.data();
+
+  await updateDoc(ref, {
+    items: [
+      ...(data?.items || []),
+      { id: crypto.randomUUID(), text }
+    ]
+  });
+}
+
 
   // SCREENS
   if (screen === "room") {
@@ -240,6 +309,9 @@ return (
   addPlayer={addPlayer}
   startGame={startGame}
   goBack={goBack}
+  addTruth={addTruth}
+  addDare={addDare}
+  addPenalty={addPenalty}
 />
     );
   }

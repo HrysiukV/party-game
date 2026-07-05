@@ -37,11 +37,12 @@ const penalties = [
 ];
 
 const tg = (window as any).Telegram?.WebApp;
-tg?.ready();
 
-console.log("Telegram WebApp:", tg);
-console.log("initDataUnsafe:", tg?.initDataUnsafe);
-console.log("user:", tg?.initDataUnsafe?.user);
+tg?.ready();
+tg?.expand();
+
+console.log("Telegram:", tg);
+console.log("User:", tg?.initDataUnsafe?.user);
 
 const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??

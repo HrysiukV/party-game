@@ -5,6 +5,8 @@ type Props = {
   joinRoom: () => void;
   showJoin: boolean;
   setShowJoin: (value: boolean) => void;
+  isAdmin: boolean;
+  openAdmin: () => void;
 };
 
 export default function Room({
@@ -14,6 +16,8 @@ export default function Room({
   joinRoom,
   showJoin,
   setShowJoin,
+  isAdmin,
+  openAdmin,
 }: Props) {
   return (
     <div className="app">
@@ -41,6 +45,18 @@ export default function Room({
             Увійти
           </button>
         </>
+      )}
+
+      {isAdmin && (
+        <button
+          onClick={openAdmin}
+          style={{
+            marginTop: 30,
+            background: "#7c3aed",
+          }}
+        >
+          👑 Адмінка
+        </button>
       )}
     </div>
   );

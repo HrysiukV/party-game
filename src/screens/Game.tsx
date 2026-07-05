@@ -1,4 +1,4 @@
-type Screen = "room" | "players" | "game";
+type Screen = "room" | "players" | "game" | "admin";
 
 type Props = {
   currentPlayer: string | null;

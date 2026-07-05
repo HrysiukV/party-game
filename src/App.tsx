@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Admin from "./screens/Admin.tsx";
 
 import Room from "./screens/Room";
 import Players from "./screens/Players";
@@ -26,7 +27,9 @@ const isAdmin = userId === "846617693";
 
 function App() {
   // UI
-  const [screen, setScreen] = useState<"room" | "players" | "game">("room");
+ const [screen, setScreen] = useState<
+  "room" | "players" | "game" | "admin"
+>("room");
 
   // ROOM
   const [room, setRoom] = useState<string | null>(null);
@@ -282,6 +285,8 @@ const data = snap.exists() ? snap.data() : null;
   joinRoom={joinRoom}
   showJoin={showJoin}
   setShowJoin={setShowJoin}
+  isAdmin={isAdmin}
+openAdmin={() => setScreen("admin")}
 />
     );
   }
@@ -306,7 +311,20 @@ return (
   isAdmin={isAdmin}
 />
     );
+
+    
   }
+  
+if (screen === "admin") {
+  return (
+    <Admin
+      addTruth={addTruth}
+      addDare={addDare}
+      addPenalty={addPenalty}
+      goBack={() => setScreen("room")}
+    />
+  );
+}
 
   if (screen === "game") {
     return (

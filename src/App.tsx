@@ -25,8 +25,6 @@ const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
   crypto.randomUUID();
 
-alert(JSON.stringify(tg?.initDataUnsafe));
-
 function App() {
   // UI
   const [screen, setScreen] = useState<"room" | "players" | "game">("room");

@@ -10,6 +10,7 @@ type Props = {
   setCard: React.Dispatch<React.SetStateAction<string | null>>;
   setPenalty: React.Dispatch<React.SetStateAction<string | null>>;
   setScreen: React.Dispatch<React.SetStateAction<Screen>>;
+  isMyTurn: boolean;
 };
 
 function Game({
@@ -19,6 +20,7 @@ function Game({
   drawCard,
   refuse,
   nextTurn,
+  isMyTurn,
   setCard,
   setPenalty,
   setScreen,
@@ -26,12 +28,20 @@ function Game({
   return (
     <div className="app">
       <h1>🎮 Хід: {currentPlayer}</h1>
+      {!isMyTurn && (
+  <p style={{ color: "#999", marginBottom: 20 }}>
+    ⏳ Зараз хід гравця <b>{currentPlayer}</b>
+  </p>
+)}
 
       {/* Кнопка витягнути карту */}
       {!card && !penalty && (
-        <button onClick={drawCard}>
-          Витягнути карту 🎲
-        </button>
+        <button
+  onClick={drawCard}
+  disabled={!isMyTurn}
+>
+  Витягнути карту 🎲
+</button>
       )}
 
       {/* КАРТА */}
@@ -43,17 +53,21 @@ function Game({
 
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             <button
-              onClick={() => {
-                setCard(null);
-                nextTurn();
-              }}
-            >
+  disabled={!isMyTurn}
+  onClick={() => {
+    setPenalty(null);
+    nextTurn();
+  }}
+>
               Виконано ✅
             </button>
 
-            <button onClick={refuse}>
-              Відмовляюсь ❌
-            </button>
+           <button
+  onClick={refuse}
+  disabled={!isMyTurn}
+>
+  Відмовляюсь ❌
+</button>
           </div>
         </div>
       )}
@@ -66,10 +80,11 @@ function Game({
           </h2>
 
           <button
-            onClick={() => {
-              setPenalty(null);
-              nextTurn();
-            }}
+  disabled={!isMyTurn}
+  onClick={() => {
+    setCard(null);
+    nextTurn();
+  }}
           >
             Ок, далі ➜
           </button>
@@ -78,9 +93,12 @@ function Game({
 
       {/* Наступний хід */}
       {!card && !penalty && (
-        <button onClick={nextTurn}>
-          Наступний гравець ➜
-        </button>
+        <button
+  onClick={nextTurn}
+  disabled={!isMyTurn}
+>
+  Наступний гравець ➜
+</button>
       )}
 
       {/* Вихід */}

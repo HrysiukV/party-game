@@ -36,24 +36,7 @@ const penalties = [
   "Виконай танець 10 секунд 💃",
 ];
 
-const tg = (window as any).Telegram?.WebApp;
-
-tg?.ready();
-
-console.log("Telegram object:", tg);
-console.log("initData:", tg?.initData);
-console.log("initDataUnsafe:", tg?.initDataUnsafe);
-console.log("user:", tg?.initDataUnsafe?.user);
-
-alert(JSON.stringify(tg?.initDataUnsafe?.user ?? null));
-
-const userId =
-  tg?.initDataUnsafe?.user?.id?.toString() ??
-  crypto.randomUUID();
-
-const userName =
-  tg?.initDataUnsafe?.user?.first_name ??
-  "Гравець";
+const userId = crypto.randomUUID();
   
 function App() {
   // UI
@@ -78,10 +61,14 @@ const [players, setPlayers] = useState<Player[]>([]);
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);
+const [name, setName] = useState("");
+
 const currentPlayer =
   players.find(
     (player) => player.id === currentPlayerId
   )?.name ?? null;
+
+  const isMyTurn = currentPlayerId === userId;
 
   // REALTIME LISTENER
   useEffect(() => {
@@ -142,7 +129,7 @@ const currentPlayer =
 
   // ADD PLAYER
   async function addPlayer() {
-  if (!room) return;
+  if (!room || !name.trim()) return;
 
   const exists = players.some(
     (player) => player.id === userId
@@ -155,9 +142,9 @@ const currentPlayer =
 
   await updateDoc(doc(db, "rooms", room), {
     players: arrayUnion({
-      id: userId,
-     name: userName,
-    }),
+  id: userId,
+  name: name.trim(),
+}),
   });
 }
 
@@ -242,10 +229,12 @@ const currentPlayer =
   if (screen === "players") {
     return (
       <Players
-    room={room}
-    players={players}
-    addPlayer={addPlayer}
-    startGame={startGame}
+  room={room}
+  name={name}
+  setName={setName}
+  players={players}
+  addPlayer={addPlayer}
+  startGame={startGame}
 />
     );
   }
@@ -259,6 +248,7 @@ const currentPlayer =
   drawCard={drawCard}
   refuse={refuse}
   nextTurn={nextTurn}
+  isMyTurn={isMyTurn}
   setCard={setCard}
   setPenalty={setPenalty}
   setScreen={setScreen}

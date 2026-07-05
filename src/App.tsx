@@ -21,6 +21,15 @@ const tg = (window as any).Telegram?.WebApp;
 tg?.ready();
 tg?.expand();
 
+alert(
+  JSON.stringify({
+    telegramExists: !!(window as any).Telegram,
+    webAppExists: !!tg,
+    initData: tg?.initData,
+    initDataUnsafe: tg?.initDataUnsafe,
+  })
+);
+
 const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
   crypto.randomUUID();

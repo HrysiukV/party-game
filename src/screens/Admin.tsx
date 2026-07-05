@@ -18,6 +18,10 @@ type Props = {
   deleteDare: (id: string) => void;
   deletePenalty: (id: string) => void;
 
+  updateTruth: (id: string, text: string) => void;
+updateDare: (id: string, text: string) => void;
+updatePenalty: (id: string, text: string) => void;
+
   goBack: () => void;
 };
 
@@ -32,6 +36,9 @@ function Admin({
   deleteDare,
   deletePenalty,
   goBack,
+  updateTruth,
+  updateDare,
+  updatePenalty,
 }: Props) {
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
@@ -43,83 +50,80 @@ function Admin({
   function renderItem(
   item: Item,
   onDelete: (id: string) => void,
-  onSave: (text: string) => void
+  onUpdate: (id: string, text: string) => void
 ) {
   const isEditing = editId === item.id;
 
   return (
     <div
-  key={item.id}
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-    padding: 10,
-    border: "1px solid #333",
-    borderRadius: 10,
-  }}
->
-  {/* 👇 ВАЖЛИВО: текст окремим блоком */}
-  <div style={{ flex: 1 }}>
-    {isEditing ? (
-      <input
-        value={editText}
-        onChange={(e) => setEditText(e.target.value)}
-        style={{ width: "100%" }}
-      />
-    ) : (
-      <span style={{ wordBreak: "break-word" }}>
-        {item.text}
-      </span>
-    )}
-  </div>
+      key={item.id}
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 8,
+        padding: 10,
+        border: "1px solid #333",
+        borderRadius: 10,
+      }}
+    >
+      <div style={{ flex: 1 }}>
+        {isEditing ? (
+          <input
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            style={{ width: "100%" }}
+          />
+        ) : (
+          <span style={{ wordBreak: "break-word" }}>
+            {item.text}
+          </span>
+        )}
+      </div>
 
-  {/* кнопки */}
-  <div style={{ display: "flex", gap: 6, marginLeft: 10 }}>
-    {isEditing ? (
-      <>
-        <button
-          onClick={() => {
-            if (!editText.trim()) return;
+      <div style={{ display: "flex", gap: 6, marginLeft: 10 }}>
+        {isEditing ? (
+          <>
+            <button
+              onClick={() => {
+                if (!editText.trim()) return;
 
-            onDelete(item.id);
-            onSave(editText.trim());
+                onUpdate(item.id, editText.trim());
 
-            setEditId(null);
-            setEditText("");
-          }}
-        >
-          💾
-        </button>
+                setEditId(null);
+                setEditText("");
+              }}
+            >
+              💾
+            </button>
 
-        <button
-          onClick={() => {
-            setEditId(null);
-            setEditText("");
-          }}
-        >
-          ❌
-        </button>
-      </>
-    ) : (
-      <>
-        <button
-          onClick={() => {
-            setEditId(item.id);
-            setEditText(item.text);
-          }}
-        >
-          ✏️
-        </button>
+            <button
+              onClick={() => {
+                setEditId(null);
+                setEditText("");
+              }}
+            >
+              ❌
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => {
+                setEditId(item.id);
+                setEditText(item.text);
+              }}
+            >
+              ✏️
+            </button>
 
-        <button onClick={() => onDelete(item.id)}>
-          🗑
-        </button>
-      </>
-    )}
-  </div>
-</div>
+            <button onClick={() => onDelete(item.id)}>
+              🗑
+            </button>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -173,35 +177,35 @@ function Admin({
       <hr />
 
       <h2>🧠 Правда</h2>
-      {truths
-        .filter((i) =>
-          i.text.toLowerCase().includes(search.toLowerCase())
-        )
-        .map((item) =>
-          renderItem(item, deleteTruth, addTruth)
-        )}
+{truths
+  .filter((i) =>
+    i.text.toLowerCase().includes(search.toLowerCase())
+  )
+  .map((item) =>
+    renderItem(item, deleteTruth, updateTruth)
+  )}
 
-      <hr />
+<hr />
 
-      <h2>🔥 Дія</h2>
-      {dares
-        .filter((i) =>
-          i.text.toLowerCase().includes(search.toLowerCase())
-        )
-        .map((item) =>
-          renderItem(item, deleteDare, addDare)
-        )}
+<h2>🔥 Дія</h2>
+{dares
+  .filter((i) =>
+    i.text.toLowerCase().includes(search.toLowerCase())
+  )
+  .map((item) =>
+    renderItem(item, deleteDare, updateDare)
+  )}
 
-      <hr />
+<hr />
 
-      <h2>⚠️ Штраф</h2>
-      {penalties
-        .filter((i) =>
-          i.text.toLowerCase().includes(search.toLowerCase())
-        )
-        .map((item) =>
-          renderItem(item, deletePenalty, addPenalty)
-        )}
+<h2>⚠️ Штраф</h2>
+{penalties
+  .filter((i) =>
+    i.text.toLowerCase().includes(search.toLowerCase())
+  )
+  .map((item) =>
+    renderItem(item, deletePenalty, updatePenalty)
+  )}
 
       <button onClick={goBack} style={{ marginTop: 20 }}>
         ⬅ Назад

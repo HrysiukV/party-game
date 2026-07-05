@@ -41,6 +41,30 @@ function App() {
   name: string;
 };
 
+const updateTruth = (id: string, text: string) => {
+  setTruths(prev =>
+    prev.map(item =>
+      item.id === id ? { ...item, text } : item
+    )
+  );
+};
+
+const updateDare = (id: string, text: string) => {
+  setDares(prev =>
+    prev.map(item =>
+      item.id === id ? { ...item, text } : item
+    )
+  );
+};
+
+const updatePenalty = (id: string, text: string) => {
+  setPenalties(prev =>
+    prev.map(item =>
+      item.id === id ? { ...item, text } : item
+    )
+  );
+};
+
 const [players] = useState<Player[]>([]);
 const [currentPlayerId] = useState<string | null>(null);
   const [card, setCard] = useState<string | null>(null);
@@ -307,20 +331,20 @@ return (
 if (screen === "admin") {
   return (
     <Admin
-      truths={truths}
-      dares={dares}
-      penalties={penalties}
-
-      addTruth={addTruth}
-      addDare={addDare}
-      addPenalty={addPenalty}
-
-      goBack={() => setScreen("room")}
-      
-      deleteTruth={deleteTruth}
+  truths={truths}
+  dares={dares}
+  penalties={penalties}
+  addTruth={addTruth}
+  addDare={addDare}
+  addPenalty={addPenalty}
+  deleteTruth={deleteTruth}
   deleteDare={deleteDare}
   deletePenalty={deletePenalty}
-    />
+  updateTruth={updateTruth}
+  updateDare={updateDare}
+  updatePenalty={updatePenalty}
+  goBack={() => setScreen("room")}
+/>
   );
 }
 

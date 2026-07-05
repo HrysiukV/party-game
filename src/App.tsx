@@ -86,29 +86,38 @@ const currentPlayer =
  useEffect(() => {
   const unsubTruths = onSnapshot(collection(db, "truths"), (snapshot) => {
     setTruths(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        text: doc.data().text,
-      }))
-    );
+  snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      text: data.text ?? data.value ?? data.question ?? "",
+    };
+  })
+);
   });
 
   const unsubDares = onSnapshot(collection(db, "dares"), (snapshot) => {
-    setDares(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        text: doc.data().text,
-      }))
-    );
+   setDares(
+  snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      text: data.text ?? data.value ?? data.question ?? "",
+    };
+  })
+);
   });
 
   const unsubPenalties = onSnapshot(collection(db, "penalties"), (snapshot) => {
-    setPenalties(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        text: doc.data().text,
-      }))
-    );
+   setPenalties(
+  snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      text: data.text ?? data.value ?? data.question ?? "",
+    };
+  })
+);
   });
 
   return () => {

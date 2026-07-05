@@ -41,29 +41,23 @@ function App() {
   name: string;
 };
 
-const updateTruth = (id: string, text: string) => {
-  setTruths(prev =>
-    prev.map(item =>
-      item.id === id ? { ...item, text } : item
-    )
-  );
-};
+async function updateTruth(id: string, text: string) {
+  await updateDoc(doc(db, "truths", id), {
+    text
+  });
+}
 
-const updateDare = (id: string, text: string) => {
-  setDares(prev =>
-    prev.map(item =>
-      item.id === id ? { ...item, text } : item
-    )
-  );
-};
+async function updateDare(id: string, text: string) {
+  await updateDoc(doc(db, "dares", id), {
+    text
+  });
+}
 
-const updatePenalty = (id: string, text: string) => {
-  setPenalties(prev =>
-    prev.map(item =>
-      item.id === id ? { ...item, text } : item
-    )
-  );
-};
+async function updatePenalty(id: string, text: string) {
+  await updateDoc(doc(db, "penalties", id), {
+    text
+  });
+}
 
 const [players] = useState<Player[]>([]);
 const [currentPlayerId] = useState<string | null>(null);

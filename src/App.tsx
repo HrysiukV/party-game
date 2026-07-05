@@ -37,7 +37,8 @@ const penalties = [
 ];
 
 const tg = (window as any).Telegram?.WebApp;
-
+console.log("Telegram:", tg);
+console.log("User:", tg?.initDataUnsafe?.user);
 const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
   crypto.randomUUID();

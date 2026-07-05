@@ -49,83 +49,77 @@ function Admin({
 
   return (
     <div
-      key={item.id}
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 8,
-        padding: 10,
-        borderRadius: 10,
-        border: "1px solid #333",
+  key={item.id}
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+    padding: 10,
+    border: "1px solid #333",
+    borderRadius: 10,
+  }}
+>
+  {/* 👇 ВАЖЛИВО: текст окремим блоком */}
+  <div style={{ flex: 1 }}>
+    {isEditing ? (
+      <input
+        value={editText}
+        onChange={(e) => setEditText(e.target.value)}
+        style={{ width: "100%" }}
+      />
+    ) : (
+      <span style={{ wordBreak: "break-word" }}>
+        {item.text}
+      </span>
+    )}
+  </div>
 
-        // 🔥 головне — виділення активного
-        background: isEditing ? "#2a2a40" : "#1a1a1a",
-        opacity: editId && !isEditing ? 0.4 : 1,
-        transform: isEditing ? "scale(1.02)" : "scale(1)",
-        transition: "0.2s",
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        {isEditing ? (
-          <input
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            autoFocus
-            style={{
-              width: "100%",
-              padding: 6,
-            }}
-          />
-        ) : (
-          <span>{item.text}</span>
-        )}
-      </div>
+  {/* кнопки */}
+  <div style={{ display: "flex", gap: 6, marginLeft: 10 }}>
+    {isEditing ? (
+      <>
+        <button
+          onClick={() => {
+            if (!editText.trim()) return;
 
-      <div style={{ display: "flex", gap: 6 }}>
-        {isEditing ? (
-          <>
-            <button
-              onClick={() => {
-                if (!editText.trim()) return;
+            onDelete(item.id);
+            onSave(editText.trim());
 
-                onDelete(item.id);
-                onSave(editText.trim());
+            setEditId(null);
+            setEditText("");
+          }}
+        >
+          💾
+        </button>
 
-                setEditId(null);
-                setEditText("");
-              }}
-            >
-              💾
-            </button>
+        <button
+          onClick={() => {
+            setEditId(null);
+            setEditText("");
+          }}
+        >
+          ❌
+        </button>
+      </>
+    ) : (
+      <>
+        <button
+          onClick={() => {
+            setEditId(item.id);
+            setEditText(item.text);
+          }}
+        >
+          ✏️
+        </button>
 
-            <button
-              onClick={() => {
-                setEditId(null);
-                setEditText("");
-              }}
-            >
-              ❌
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={() => {
-                setEditId(item.id);
-                setEditText(item.text);
-              }}
-            >
-              ✏️
-            </button>
-
-            <button onClick={() => onDelete(item.id)}>
-              🗑
-            </button>
-          </>
-        )}
-      </div>
-    </div>
+        <button onClick={() => onDelete(item.id)}>
+          🗑
+        </button>
+      </>
+    )}
+  </div>
+</div>
   );
 }
 

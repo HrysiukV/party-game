@@ -36,6 +36,12 @@ const penalties = [
   "Виконай танець 10 секунд 💃",
 ];
 
+const tg = (window as any).Telegram?.WebApp;
+
+const userId =
+  tg?.initDataUnsafe?.user?.id?.toString() ??
+  crypto.randomUUID();
+  
 function App() {
   // UI
   const [screen, setScreen] = useState<"room" | "players" | "game">("room");
@@ -48,11 +54,22 @@ function App() {
   const [name, setName] = useState("");
 
   // GAME STATE (SYNC FIREBASE)
-  const [players, setPlayers] = useState<string[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
+  type Player = {
+  id: string;
+  name: string;
+};
+
+const [players, setPlayers] = useState<Player[]>([]);
+
+  const [currentPlayerId, setCurrentPlayerId] =  useState<string | null>(null);
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);
+const currentPlayer =
+  players.find(
+    (player) => player.id === currentPlayerId
+  )?.name ?? null;
+
   // REALTIME LISTENER
   useEffect(() => {
     if (!room) return;
@@ -64,7 +81,7 @@ const [showJoin, setShowJoin] = useState(false);
       if (!data) return;
 
       setPlayers(data.players || []);
-      setCurrentPlayer(data.currentPlayer || null);
+      setCurrentPlayerId(data.currentPlayerId || null);
       setCard(data.card || null);
       setPenalty(data.penalty || null);
     });
@@ -77,12 +94,13 @@ const [showJoin, setShowJoin] = useState(false);
     const code = Math.random().toString(36).substring(2, 7).toUpperCase();
 
     await setDoc(doc(db, "rooms", code), {
-      players: [],
-      currentPlayer: null,
-      card: null,
-      penalty: null,
-      createdAt: Date.now(),
-    });
+  hostId: userId,
+  players: [],
+  currentPlayerId: null,
+  card: null,
+  penalty: null,
+  createdAt: Date.now(),
+});
 
     setRoom(code);
     setScreen("players");
@@ -111,40 +129,60 @@ const [showJoin, setShowJoin] = useState(false);
 
   // ADD PLAYER
   async function addPlayer() {
-    if (!room || !name.trim()) return;
+  if (!room || !name.trim()) return;
 
-    await updateDoc(doc(db, "rooms", room), {
-      players: arrayUnion(name),
-    });
+  const exists = players.some(
+    (player) => player.id === userId
+  );
 
-    setName("");
+  if (exists) {
+    alert("Ти вже приєднався до кімнати");
+    return;
   }
+
+  await updateDoc(doc(db, "rooms", room), {
+    players: arrayUnion({
+      id: userId,
+      name: name.trim(),
+    }),
+  });
+
+  setName("");
+}
 
   // START GAME
   async function startGame() {
-    if (!room || players.length === 0) return;
+  if (!room || players.length === 0) return;
 
-    const random = players[Math.floor(Math.random() * players.length)];
+  const random =
+    players[Math.floor(Math.random() * players.length)];
 
-    await updateDoc(doc(db, "rooms", room), {
-      currentPlayer: random,
-    });
+  await updateDoc(doc(db, "rooms", room), {
+    currentPlayerId: random.id,
+  });
 
-    setScreen("game");
-  }
+  setScreen("game");
+}
 
   // NEXT TURN
   async function nextTurn() {
-    if (!room || players.length === 0) return;
+  if (!room || players.length === 0) return;
 
-    const random = players[Math.floor(Math.random() * players.length)];
+  const currentIndex = players.findIndex(
+    (player) => player.id === currentPlayerId
+  );
 
-    await updateDoc(doc(db, "rooms", room), {
-      currentPlayer: random,
-      card: null,
-      penalty: null,
-    });
-  }
+  const nextIndex =
+    currentIndex === players.length - 1
+      ? 0
+      : currentIndex + 1;
+
+  await updateDoc(doc(db, "rooms", room), {
+    currentPlayerId: players[nextIndex].id,
+    card: null,
+    penalty: null,
+  });
+}
 
   // DRAW CARD
   async function drawCard() {
@@ -206,16 +244,16 @@ const [showJoin, setShowJoin] = useState(false);
   if (screen === "game") {
     return (
       <Game
-        currentPlayer={currentPlayer}
-        card={card}
-        penalty={penalty}
-        drawCard={drawCard}
-        refuse={refuse}
-        nextTurn={nextTurn}
-        setCard={setCard}
-        setPenalty={setPenalty}
-        setScreen={setScreen}
-      />
+  currentPlayer={currentPlayer}
+  card={card}
+  penalty={penalty}
+  drawCard={drawCard}
+  refuse={refuse}
+  nextTurn={nextTurn}
+  setCard={setCard}
+  setPenalty={setPenalty}
+  setScreen={setScreen}
+/>
     );
   }
 

@@ -1,8 +1,13 @@
+type Player = {
+  id: string;
+  name: string;
+};
+
 type Props = {
   room: string | null;
   name: string;
   setName: (value: string) => void;
-  players: string[];
+  players: Player[];
   addPlayer: () => void;
   startGame: () => void;
 };
@@ -24,20 +29,25 @@ function Players({
       <input
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Ім'я гравця"
+        placeholder="Ім'я"
       />
 
       <button onClick={addPlayer}>
         Додати
       </button>
 
-      <div>
-        {players.map((player, index) => (
-          <p key={index}>👤 {player}</p>
+      <div style={{ marginTop: 20 }}>
+        {players.map((player) => (
+          <p key={player.id}>
+            👤 {player.name}
+          </p>
         ))}
       </div>
 
-      <button onClick={startGame}>
+      <button
+        style={{ marginTop: 20 }}
+        onClick={startGame}
+      >
         Почати гру
       </button>
     </div>

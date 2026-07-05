@@ -35,13 +35,13 @@ function App() {
   name: string;
 };
 
-const [players] = useState<Player[]>([]);
-
-  const [currentPlayerId] =  useState<string | null>(null);
+const [players, setPlayers] = useState<Player[]>([]);
+const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(null);
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);
 const [name, setName] = useState("");
+
 
 const [truths, setTruths] = useState<string[]>([]);
 const [dares, setDares] = useState<string[]>([]);
@@ -195,12 +195,18 @@ const currentPlayer =
 
   const type = Math.random() < 0.5 ? "truth" : "dare";
 
-  const text =
-    type === "truth"
-      ? `🧠 ПРАВДА\n\n${truths[Math.floor(Math.random() * truths.length)]}`
-      : `🔥 ДІЯ\n\n${dares[Math.floor(Math.random() * dares.length)]}`;
+const list =
+  type === "truth" ? truths : dares;
+if (!list.length) return;
+const randomText =
+  list[Math.floor(Math.random() * list.length)];
 
-  await updateDoc(doc(db, "rooms", room), {
+const text =
+  type === "truth"
+    ? `🧠 ПРАВДА\n\n${randomText}`
+    : `🔥 ДІЯ\n\n${randomText}`;
+ 
+    await updateDoc(doc(db, "rooms", room), {
     card: text,
     penalty: null,
   });
@@ -211,7 +217,9 @@ const currentPlayer =
   if (!room) return;
 
   const random =
-    penalties[Math.floor(Math.random() * penalties.length)];
+  penalties.length
+    ? penalties[Math.floor(Math.random() * penalties.length)]
+    : "Випий 1 ковток 🍺";
 
   await updateDoc(doc(db, "rooms", room), {
     penalty: "⚠️ ШТРАФ:\n\n" + random,
@@ -234,7 +242,7 @@ async function addDare(text: string) {
   const ref = doc(db, "global", "dares");
 
   const snap = await getDoc(ref);
-  const data = snap.data();
+const data = snap.exists() ? snap.data() : null;
 
   await updateDoc(ref, {
     items: [
@@ -247,7 +255,7 @@ async function addPenalty(text: string) {
   const ref = doc(db, "global", "penalties");
 
   const snap = await getDoc(ref);
-  const data = snap.data();
+const data = snap.exists() ? snap.data() : null;
 
   await updateDoc(ref, {
     items: [

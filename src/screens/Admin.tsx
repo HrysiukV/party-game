@@ -14,6 +14,10 @@ type Props = {
   addDare: (text: string) => void;
   addPenalty: (text: string) => void;
 
+  deleteTruth: (id: string) => void;
+  deleteDare: (id: string) => void;
+  deletePenalty: (id: string) => void;
+
   goBack: () => void;
 };
 
@@ -24,6 +28,9 @@ function Admin({
   addTruth,
   addDare,
   addPenalty,
+  deleteTruth,
+  deleteDare,
+  deletePenalty,
   goBack,
 }: Props) {
   const [text, setText] = useState("");
@@ -79,7 +86,23 @@ function Admin({
 <h2>🧠 Правда</h2>
 
 {truths.map((item) => (
-  <p key={item.id}>{item.text}</p>
+  <div
+    key={item.id}
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8,
+    }}
+  >
+    <span>{item.text}</span>
+
+    <button
+      onClick={() => deleteTruth(item.id)}
+    >
+      🗑
+    </button>
+  </div>
 ))}
 
 <hr />
@@ -87,7 +110,23 @@ function Admin({
 <h2>🔥 Дія</h2>
 
 {dares.map((item) => (
-  <p key={item.id}>{item.text}</p>
+  <div
+    key={item.id}
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8,
+    }}
+  >
+    <span>{item.text}</span>
+
+    <button
+      onClick={() => deleteDare(item.id)}
+    >
+      🗑
+    </button>
+  </div>
 ))}
 
 <hr />
@@ -95,8 +134,26 @@ function Admin({
 <h2>⚠️ Штраф</h2>
 
 {penalties.map((item) => (
-  <p key={item.id}>{item.text}</p>
+  <div
+    key={item.id}
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8,
+    }}
+  >
+    <span>{item.text}</span>
+
+    <button
+      onClick={() => deletePenalty(item.id)}
+    >
+      🗑
+    </button>
+  </div>
 ))}
+
+
       <button onClick={goBack}>
         ⬅ Назад
       </button>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Admin from "./screens/Admin.tsx";
-
+import { deleteDoc } from "firebase/firestore";
 import Room from "./screens/Room";
 import Players from "./screens/Players";
 import Game from "./screens/Game";
@@ -251,6 +251,18 @@ async function addPenalty(text: string) {
   });
 }
 
+async function deleteTruth(id: string) {
+  await deleteDoc(doc(db, "truths", id));
+}
+
+async function deleteDare(id: string) {
+  await deleteDoc(doc(db, "dares", id));
+}
+
+async function deletePenalty(id: string) {
+  await deleteDoc(doc(db, "penalties", id));
+}
+
 
   // SCREENS
   if (screen === "room") {
@@ -304,6 +316,10 @@ if (screen === "admin") {
       addPenalty={addPenalty}
 
       goBack={() => setScreen("room")}
+      
+      deleteTruth={deleteTruth}
+  deleteDare={deleteDare}
+  deletePenalty={deletePenalty}
     />
   );
 }

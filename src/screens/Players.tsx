@@ -14,12 +14,12 @@ type Props = {
   startGame: () => void;
   goBack: () => void;
   addTruth: (text: string) => void;
-addDare: (text: string) => void;
-addPenalty: (text: string) => void;
+  addDare: (text: string) => void;
+  addPenalty: (text: string) => void;
+  isAdmin: boolean;
 };
 
 function Players({
-
   room,
   name,
   setName,
@@ -27,25 +27,31 @@ function Players({
   addPlayer,
   startGame,
   goBack,
-   addTruth,
+  addTruth,
   addDare,
   addPenalty,
+  isAdmin,
 }: Props) {
-   const [adminText, setAdminText] = useState("");
-  const [adminType, setAdminType] = useState<"truth" | "dare" | "penalty">("truth");
+  const [adminText, setAdminText] = useState("");
+  const [adminType, setAdminType] = useState<
+    "truth" | "dare" | "penalty"
+  >("truth");
+
   return (
     <div className="app">
       <h1>Гравці</h1>
 
       {room && <p>Кімната: {room}</p>}
-<input
-  value={name}
-  onChange={(e) => setName(e.target.value)}
-  placeholder="Введіть ім'я"
-/>
+
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Введіть ім'я"
+      />
+
       <button onClick={addPlayer}>
-  Приєднатися
-</button>
+        Приєднатися
+      </button>
 
       <div style={{ marginTop: 20 }}>
         {players.map((player) => (
@@ -61,62 +67,81 @@ function Players({
       >
         Почати гру
       </button>
-     
-     <div style={{ marginTop: 30, padding: 10, border: "1px solid #333", borderRadius: 10 }}>
-  <h3>🛠 Адмінка</h3>
 
-  <select
-  value={adminType}
-  onChange={(e) =>
-    setAdminType(e.target.value as "truth" | "dare" | "penalty")
-  }
->
-  <option value="truth">🧠 Truth</option>
-  <option value="dare">🔥 Dare</option>
-  <option value="penalty">⚠️ Penalty</option>
-</select>
+      {/* =======================
+          АДМІНКА
+      ======================== */}
 
+      {isAdmin && (
+        <div
+          style={{
+            marginTop: 30,
+            padding: 15,
+            border: "1px solid #333",
+            borderRadius: 10,
+          }}
+        >
+          <h3>🛠 Адмінка</h3>
 
-  <input
-    value={adminText}
-    onChange={(e) => setAdminText(e.target.value)}
-    placeholder="Введи питання або дію"
-  />
+          <select
+            value={adminType}
+            onChange={(e) =>
+              setAdminType(
+                e.target.value as
+                  | "truth"
+                  | "dare"
+                  | "penalty"
+              )
+            }
+          >
+            <option value="truth">🧠 Правда</option>
+            <option value="dare">🔥 Дія</option>
+            <option value="penalty">⚠️ Штраф</option>
+          </select>
 
-  <button
-  onClick={() => {
-    if (!adminText.trim()) return;
+          <input
+            style={{
+              display: "block",
+              width: "100%",
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+            value={adminText}
+            onChange={(e) => setAdminText(e.target.value)}
+            placeholder="Введіть нове питання..."
+          />
 
-    if (adminType === "truth") {
-      addTruth(adminText.trim());
-    } else if (adminType === "dare") {
-      addDare(adminText.trim());
-    } else {
-      addPenalty(adminText.trim());
-    }
+          <button
+            onClick={() => {
+              if (!adminText.trim()) return;
 
-    setAdminText("");
-  }}
->
-  ➕ Додати
-</button>
-</div>
-     
+              if (adminType === "truth") {
+                addTruth(adminText.trim());
+              } else if (adminType === "dare") {
+                addDare(adminText.trim());
+              } else {
+                addPenalty(adminText.trim());
+              }
+
+              setAdminText("");
+            }}
+          >
+            ➕ Додати
+          </button>
+        </div>
+      )}
+
       <button
-  onClick={goBack}
-  style={{ marginTop: 20, background: "#2a2a3a" }}
->
-  ⬅ Назад
-</button>
-
-
+        onClick={goBack}
+        style={{
+          marginTop: 20,
+          background: "#2a2a3a",
+        }}
+      >
+        ⬅ Назад
+      </button>
     </div>
-    
-    
-    
   );
-  
-  
 }
 
 export default Players;

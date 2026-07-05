@@ -18,21 +18,15 @@ import { db } from "./services/firebase";
 
 const tg = (window as any).Telegram?.WebApp;
 
-tg?.ready();
-tg?.expand();
-
-alert(
-  JSON.stringify({
-    telegramExists: !!(window as any).Telegram,
-    webAppExists: !!tg,
-    initData: tg?.initData,
-    initDataUnsafe: tg?.initDataUnsafe,
-  })
-);
-
 const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
   crypto.randomUUID();
+
+const userName =
+  tg?.initDataUnsafe?.user?.first_name ??
+  "Гравець";
+
+const isAdmin = userId === "846617693";
 
 function App() {
   // UI
@@ -313,6 +307,7 @@ return (
   addTruth={addTruth}
   addDare={addDare}
   addPenalty={addPenalty}
+  isAdmin={isAdmin}
 />
     );
   }

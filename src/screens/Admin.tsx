@@ -34,6 +34,7 @@ function Admin({
   goBack,
 }: Props) {
   const [text, setText] = useState("");
+  const [search, setSearch] = useState("");
   const [type, setType] = useState<
     "truth" | "dare" | "penalty"
   >("truth");
@@ -81,77 +82,94 @@ function Admin({
       >
         ➕ Додати
       </button>
+      <hr />
+
+<input
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  placeholder="🔍 Пошук..."
+/>
+
+<p>
+  🧠 {truths.length} | 🔥 {dares.length} | ⚠️ {penalties.length}
+</p>
 <hr />
 
 <h2>🧠 Правда</h2>
 
-{truths.map((item) => (
-  <div
-    key={item.id}
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 8,
-    }}
-  >
-    <span>{item.text}</span>
-
-    <button
-      onClick={() => deleteTruth(item.id)}
+{truths
+  .filter((item) =>
+    item.text.toLowerCase().includes(search.toLowerCase())
+  )
+  .map((item) => (
+    <div
+      key={item.id}
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 8,
+      }}
     >
-      🗑
-    </button>
-  </div>
-))}
+      <span>{item.text}</span>
+
+      <button onClick={() => deleteTruth(item.id)}>
+        🗑
+      </button>
+    </div>
+  ))}
 
 <hr />
 
 <h2>🔥 Дія</h2>
 
-{dares.map((item) => (
-  <div
-    key={item.id}
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 8,
-    }}
-  >
-    <span>{item.text}</span>
-
-    <button
-      onClick={() => deleteDare(item.id)}
+{dares
+  .filter((item) =>
+    item.text.toLowerCase().includes(search.toLowerCase())
+  )
+  .map((item) => (
+    <div
+      key={item.id}
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 8,
+      }}
     >
-      🗑
-    </button>
-  </div>
-))}
+      <span>{item.text}</span>
+
+      <button onClick={() => deleteDare(item.id)}>
+        🗑
+      </button>
+    </div>
+  ))}
 
 <hr />
 
 <h2>⚠️ Штраф</h2>
 
-{penalties.map((item) => (
-  <div
-    key={item.id}
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 8,
-    }}
-  >
-    <span>{item.text}</span>
-
-    <button
-      onClick={() => deletePenalty(item.id)}
+{penalties
+  .filter((item) =>
+    item.text.toLowerCase().includes(search.toLowerCase())
+  )
+  .map((item) => (
+    <div
+      key={item.id}
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 8,
+      }}
     >
-      🗑
-    </button>
-  </div>
-))}
+      <span>{item.text}</span>
+
+      <button onClick={() => deletePenalty(item.id)}>
+        🗑
+      </button>
+    </div>
+  ))}
 
 
       <button onClick={goBack}>

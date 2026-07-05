@@ -302,7 +302,10 @@ async function deletePenalty(id: string) {
   showJoin={showJoin}
   setShowJoin={setShowJoin}
   isAdmin={isAdmin}
-openAdmin={() => setScreen("admin")}
+openAdmin={() => {
+  console.log("CLICK ADMIN");
+  setScreen("admin");
+}}
 />
     );
   }
@@ -330,7 +333,7 @@ return (
 
     
   }
-  
+  console.log("SCREEN IS:", screen);
 if (screen === "admin") {
   return (
     <Admin

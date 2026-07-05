@@ -169,16 +169,29 @@ console.log("truths:", truths);
       </p>
 
       <hr />
+<div>
+  <h2>🧠 Правда</h2>
 
-      <h2>TEST</h2>
+  {truths.map((item) =>
+    renderItem(item, deleteTruth, updateTruth)
+  )}
 
-{truths.map((item) => (
-  <div key={item.id} style={{ border: "1px solid red", margin: 5 }}>
-    ID: {item.id}
-    <br />
-    TEXT: {item.text}
-  </div>
-))}
+  <hr />
+
+  <h2>🔥 Дія</h2>
+
+  {dares.map((item) =>
+    renderItem(item, deleteDare, updateDare)
+  )}
+
+  <hr />
+
+  <h2>⚠️ Штраф</h2>
+
+  {penalties.map((item) =>
+    renderItem(item, deletePenalty, updatePenalty)
+  )}
+</div>
 
       <button onClick={goBack} style={{ marginTop: 20 }}>
         ⬅ Назад

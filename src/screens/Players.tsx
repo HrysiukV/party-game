@@ -5,8 +5,6 @@ type Player = {
 
 type Props = {
   room: string | null;
-  name: string;
-  setName: (value: string) => void;
   players: Player[];
   addPlayer: () => void;
   startGame: () => void;
@@ -14,8 +12,6 @@ type Props = {
 
 function Players({
   room,
-  name,
-  setName,
   players,
   addPlayer,
   startGame,
@@ -26,11 +22,9 @@ function Players({
 
       {room && <p>Кімната: {room}</p>}
 
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Ім'я"
-      />
+      <button onClick={addPlayer}>
+  Приєднатися
+</button>
 
       <button onClick={addPlayer}>
         Додати

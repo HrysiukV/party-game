@@ -41,6 +41,10 @@ const tg = (window as any).Telegram?.WebApp;
 const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
   crypto.randomUUID();
+
+const userName =
+  tg?.initDataUnsafe?.user?.first_name ??
+  "Гравець";
   
 function App() {
   // UI
@@ -51,7 +55,7 @@ function App() {
   const [roomInput, setRoomInput] = useState("");
 
   // PLAYER
-  const [name, setName] = useState("");
+ 
 
   // GAME STATE (SYNC FIREBASE)
   type Player = {
@@ -129,7 +133,7 @@ const currentPlayer =
 
   // ADD PLAYER
   async function addPlayer() {
-  if (!room || !name.trim()) return;
+  if (!room) return;
 
   const exists = players.some(
     (player) => player.id === userId
@@ -143,11 +147,9 @@ const currentPlayer =
   await updateDoc(doc(db, "rooms", room), {
     players: arrayUnion({
       id: userId,
-      name: name.trim(),
+     name: userName,
     }),
   });
-
-  setName("");
 }
 
   // START GAME
@@ -231,13 +233,11 @@ const currentPlayer =
   if (screen === "players") {
     return (
       <Players
-        room={room}
-        name={name}
-        setName={setName}
-        players={players}
-        addPlayer={addPlayer}
-        startGame={startGame}
-      />
+    room={room}
+    players={players}
+    addPlayer={addPlayer}
+    startGame={startGame}
+/>
     );
   }
 

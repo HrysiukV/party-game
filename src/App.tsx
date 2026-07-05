@@ -86,23 +86,28 @@ const currentPlayer =
  useEffect(() => {
   const unsubTruths = onSnapshot(collection(db, "truths"), (snapshot) => {
     setTruths(
-  snapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      id: doc.id,
-      text: data.text ?? data.value ?? data.question ?? "",
-    };
-  })
-);
+      snapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        console.log("TRUTH DOC:", data); // 👈 ОЦЕ ДОДАЛА
+
+        return {
+          id: doc.id,
+          text: data.text || "",
+        };
+      })
+    );
   });
 
   const unsubDares = onSnapshot(collection(db, "dares"), (snapshot) => {
    setDares(
-  snapshot.docs.map((doc) => {
-    const data = doc.data();
+  snapshot.docs.map((d) => {
+    const data = d.data();
+    console.log("DARE DOC:", data);
+
     return {
-      id: doc.id,
-      text: data.text ?? data.value ?? data.question ?? "",
+      id: d.id,
+      text: data.text || "",
     };
   })
 );
@@ -110,11 +115,13 @@ const currentPlayer =
 
   const unsubPenalties = onSnapshot(collection(db, "penalties"), (snapshot) => {
    setPenalties(
-  snapshot.docs.map((doc) => {
-    const data = doc.data();
+  snapshot.docs.map((d) => {
+    const data = d.data();
+    console.log("PENALTY DOC:", data);
+
     return {
-      id: doc.id,
-      text: data.text ?? data.value ?? data.question ?? "",
+      id: d.id,
+      text: data.text || "",
     };
   })
 );

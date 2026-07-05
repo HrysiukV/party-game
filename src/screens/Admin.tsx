@@ -41,83 +41,93 @@ function Admin({
   const [editText, setEditText] = useState("");
 
   function renderItem(
-    item: Item,
-    onDelete: (id: string) => void,
-    onSave: (text: string) => void
-  ) {
-    const isEditing = editId === item.id;
+  item: Item,
+  onDelete: (id: string) => void,
+  onSave: (text: string) => void
+) {
+  const isEditing = editId === item.id;
 
-    return (
-      <div
-        key={item.id}
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 8,
-          padding: 6,
-          border: "1px solid #333",
-          borderRadius: 8,
-        }}
-      >
-        <div style={{ flex: 1 }}>
-          {isEditing ? (
-            <input
-              value={editText}
-              onChange={(e) => setEditText(e.target.value)}
-              style={{ width: "100%" }}
-            />
-          ) : (
-            <span>{item.text}</span>
-          )}
-        </div>
+  return (
+    <div
+      key={item.id}
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 8,
+        padding: 10,
+        borderRadius: 10,
+        border: "1px solid #333",
 
-        <div style={{ display: "flex", gap: 6 }}>
-          {isEditing ? (
-            <>
-              <button
-                onClick={() => {
-                  if (!editText.trim()) return;
-
-                  onDelete(item.id);
-                  onSave(editText.trim());
-
-                  setEditId(null);
-                  setEditText("");
-                }}
-              >
-                💾
-              </button>
-
-              <button
-                onClick={() => {
-                  setEditId(null);
-                  setEditText("");
-                }}
-              >
-                ❌
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => {
-                  setEditId(item.id);
-                  setEditText(item.text);
-                }}
-              >
-                ✏️
-              </button>
-
-              <button onClick={() => onDelete(item.id)}>
-                🗑
-              </button>
-            </>
-          )}
-        </div>
+        // 🔥 головне — виділення активного
+        background: isEditing ? "#2a2a40" : "#1a1a1a",
+        opacity: editId && !isEditing ? 0.4 : 1,
+        transform: isEditing ? "scale(1.02)" : "scale(1)",
+        transition: "0.2s",
+      }}
+    >
+      <div style={{ flex: 1 }}>
+        {isEditing ? (
+          <input
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            autoFocus
+            style={{
+              width: "100%",
+              padding: 6,
+            }}
+          />
+        ) : (
+          <span>{item.text}</span>
+        )}
       </div>
-    );
-  }
+
+      <div style={{ display: "flex", gap: 6 }}>
+        {isEditing ? (
+          <>
+            <button
+              onClick={() => {
+                if (!editText.trim()) return;
+
+                onDelete(item.id);
+                onSave(editText.trim());
+
+                setEditId(null);
+                setEditText("");
+              }}
+            >
+              💾
+            </button>
+
+            <button
+              onClick={() => {
+                setEditId(null);
+                setEditText("");
+              }}
+            >
+              ❌
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => {
+                setEditId(item.id);
+                setEditText(item.text);
+              }}
+            >
+              ✏️
+            </button>
+
+            <button onClick={() => onDelete(item.id)}>
+              🗑
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="app">

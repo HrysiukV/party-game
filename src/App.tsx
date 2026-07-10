@@ -52,6 +52,9 @@ const [players, setPlayers] = useState<Player[]>([]);
 const [currentPlayerId, setCurrentPlayerId] =
   useState<string | null>(null);
 
+  const [hostId, setHostId] =
+  useState<string | null>(null);
+
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);
@@ -123,6 +126,7 @@ useEffect(() => {
       setCurrentPlayerId(data.currentPlayerId || null);
       setCard(data.card || null);
       setPenalty(data.penalty || null);
+      setHostId(data.hostId || null);
     }
   );
 
@@ -295,6 +299,7 @@ return (
   addPlayer={addPlayer}
   startGame={startGame}
   goBack={goBack}
+  isHost={hostId === userId}
 />
     );
 

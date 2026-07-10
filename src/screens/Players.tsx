@@ -1,5 +1,3 @@
-
-
 type Player = {
   id: string;
   name: string;
@@ -13,6 +11,7 @@ type Props = {
   addPlayer: () => void;
   startGame: () => void;
   goBack: () => void;
+  isHost: boolean;
 };
 
 function Players({
@@ -23,12 +22,17 @@ function Players({
   addPlayer,
   startGame,
   goBack,
+  isHost,
 }: Props) {
   return (
     <div className="app">
-      <h1>Гравці</h1>
+      <h1>👥 Гравці</h1>
 
-      {room && <p>Кімната: {room}</p>}
+      {room && (
+        <p>
+          Код кімнати: <b>{room}</b>
+        </p>
+      )}
 
       <input
         value={name}
@@ -40,20 +44,61 @@ function Players({
         Приєднатися
       </button>
 
-      <div style={{ marginTop: 20 }}>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 420,
+          marginTop: 25,
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+        }}
+      >
         {players.map((player) => (
-          <p key={player.id}>
-            👤 {player.name}
-          </p>
+          <div
+            key={player.id}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              padding: "12px 16px",
+              borderRadius: 14,
+              background: "#1c1c26",
+            }}
+          >
+            <div
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: "50%",
+                background: "#22c55e",
+              }}
+            />
+
+            <span style={{ flex: 1 }}>
+              {player.name}
+            </span>
+          </div>
         ))}
       </div>
 
-      <button
-        style={{ marginTop: 20 }}
-        onClick={startGame}
-      >
-        Почати гру
-      </button>
+      {isHost ? (
+        <button
+          style={{ marginTop: 25 }}
+          onClick={startGame}
+        >
+          🎮 Почати гру
+        </button>
+      ) : (
+        <p
+          style={{
+            marginTop: 25,
+            color: "#a1a1aa",
+          }}
+        >
+          ⏳ Очікуємо, поки хост почне гру...
+        </p>
+      )}
 
       <button
         onClick={goBack}

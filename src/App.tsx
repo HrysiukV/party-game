@@ -29,14 +29,6 @@ import {
   collection
 } from "firebase/firestore";
 
-//import {
-//  createRoom as createRoomService,
-//  getRoom,
-//  updateRoom,
-//  addPlayerToRoom,
-// removeRoom,
-//} from "./services/roomService";
-
 import { db } from "./services/firebase";
 
 const tg = (window as any).Telegram?.WebApp;
@@ -391,6 +383,8 @@ if (screen === "admin") {
   setPenalty={setPenalty}
   setScreen={setScreen}
   leaveRoom={leaveRoom}
+  room={room}
+
 />
     );
   }

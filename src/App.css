@@ -220,3 +220,27 @@ border-radius:20px;
 background:#111;
 
 }
+
+.room-badge {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+
+  padding: 8px 14px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  backdrop-filter: blur(12px);
+
+  border-radius: 20px;
+
+  color: #aaa;
+
+  font-size: 14px;
+  letter-spacing: 1px;
+
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
+
+  animation: fadeIn .3s ease;
+}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import RoomBadge from "../components/RoomBadge";
 
 type Screen = "room" | "players" | "game" | "admin";
 
@@ -14,6 +15,7 @@ type Props = {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>;
   isMyTurn: boolean;
   leaveRoom: () => void;
+  room: string | null;
 };
 
 function Game({
@@ -27,6 +29,7 @@ function Game({
   setCard,
   setPenalty,
   leaveRoom,
+  room,
 }: Props) {
   const [showCard, setShowCard] = useState(false);
 
@@ -44,6 +47,7 @@ function Game({
 
   return (
     <div className="app">
+    <RoomBadge room={room} />
       <h1>🎮 Хід: {currentPlayer}</h1>
 
       {!isMyTurn && (

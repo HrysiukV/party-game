@@ -1,3 +1,5 @@
+import RoomBadge from "../components/RoomBadge";
+
 type Player = {
   id: string;
   name: string;
@@ -26,6 +28,9 @@ function Players({
 }: Props) {
   return (
     <div className="app">
+     
+      <RoomBadge room={room} />
+
       <h1>👥 Гравці</h1>
 
       {room && (

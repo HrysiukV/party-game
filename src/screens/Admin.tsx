@@ -98,16 +98,23 @@ const [view, setView] = useState<
       <h1>👑 Адмінка</h1>
 
       <select
-        value={type}
-        onChange={(e) =>
-          setType(
-            e.target.value as
-              | "truth"
-              | "dare"
-              | "penalty"
-          )
-        }
-      >
+  value={type}
+  onChange={(e) =>
+    setType(
+      e.target.value as
+        | "truth"
+        | "dare"
+        | "penalty"
+    )
+  }
+  style={{
+    width: "100%",
+    padding: "14px",
+    fontSize: 17,
+    borderRadius: 12,
+    marginBottom: 12,
+  }}
+>
         <option value="truth">
           🧠 Правда
         </option>
@@ -148,7 +155,7 @@ const [view, setView] = useState<
         ➕ Додати
       </button>
 
-      <hr />
+      <div style={{ height: 20 }} />
 
       <input
         value={search}
@@ -162,19 +169,25 @@ const [view, setView] = useState<
   style={{
     display: "flex",
     justifyContent: "center",
-    gap: 6,
-    marginTop: 10,
+    gap: 8,
+    marginTop: 12,
     marginBottom: 20,
     flexWrap: "wrap",
   }}
 >
   <button
     onClick={() => setView("truth")}
-    style={{
-  minWidth: 70,
-  padding: "6px 10px",
-  fontSize: 12,
+   style={{
+  minWidth: 95,
+  height: 42,
+  padding: "0 12px",
+  fontSize: 13,
+  fontWeight: 600,
+  borderRadius: 10,
   background: view === "truth" ? "#7c3aed" : "#333",
+  color: "white",
+  border: "none",
+  cursor: "pointer",
 }}
   >
     🧠 Правда
@@ -183,10 +196,16 @@ const [view, setView] = useState<
   <button
     onClick={() => setView("dare")}
    style={{
-  minWidth: 70,
-  padding: "6px 10px",
-  fontSize: 12,
+  minWidth: 95,
+  height: 42,
+  padding: "0 12px",
+  fontSize: 13,
+  fontWeight: 600,
+  borderRadius: 10,
   background: view === "dare" ? "#7c3aed" : "#333",
+  color: "white",
+  border: "none",
+  cursor: "pointer",
 }}
   >
     🔥 Дія
@@ -195,16 +214,22 @@ const [view, setView] = useState<
   <button
     onClick={() => setView("penalty")}
     style={{
-  minWidth: 70,
-  padding: "6px 10px",
-  fontSize: 12,
+  minWidth: 95,
+  height: 42,
+  padding: "0 12px",
+  fontSize: 13,
+  fontWeight: 600,
+  borderRadius: 10,
   background: view === "penalty" ? "#7c3aed" : "#333",
+  color: "white",
+  border: "none",
+  cursor: "pointer",
 }}
   >
     ⚠️ Штраф
   </button>
 </div>
-      <hr />
+      <div style={{ height: 20 }} />
 
       {view === "truth" &&
   truths

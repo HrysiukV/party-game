@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 type Screen = "room" | "players" | "game" | "admin";
 
 type Props = {
@@ -25,84 +27,128 @@ function Game({
   setPenalty,
   setScreen,
 }: Props) {
+  const [showCard, setShowCard] = useState(false);
+
+  useEffect(() => {
+    if (card || penalty) {
+      setShowCard(false);
+
+      const timer = setTimeout(() => {
+        setShowCard(true);
+      }, 250);
+
+      return () => clearTimeout(timer);
+    }
+  }, [card, penalty]);
+
   return (
     <div className="app">
       <h1>🎮 Хід: {currentPlayer}</h1>
-      {!isMyTurn && (
-  <p style={{ color: "#999", marginBottom: 20 }}>
-    ⏳ Зараз хід гравця <b>{currentPlayer}</b>
-  </p>
-)}
 
-      {/* Кнопка витягнути карту */}
-      {!card && !penalty && (
-        <button
-  onClick={drawCard}
-  disabled={!isMyTurn}
->
-  Витягнути карту 🎲
-</button>
+      {!isMyTurn && (
+        <p
+          style={{
+            color: "#999",
+            marginBottom: 20,
+          }}
+        >
+          ⏳ Зараз хід гравця <b>{currentPlayer}</b>
+        </p>
       )}
 
-      {/* КАРТА */}
+      {!card && !penalty && (
+        <button
+          onClick={drawCard}
+          disabled={!isMyTurn}
+        >
+          Витягнути карту 🎲
+        </button>
+      )}
+
       {card && (
-        <div className="card">
-          <h2 style={{ whiteSpace: "pre-line" }}>
+        <div
+          className={`card ${
+            showCard ? "card-show" : "card-hide"
+          }`}
+        >
+          <h2
+            style={{
+              whiteSpace: "pre-line",
+            }}
+          >
             {card}
           </h2>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+              marginTop: 20,
+            }}
+          >
             <button
-  disabled={!isMyTurn}
-  onClick={() => {
-    setPenalty(null);
-    nextTurn();
-  }}
->
+              disabled={!isMyTurn}
+              onClick={() => {
+                setPenalty(null);
+                nextTurn();
+              }}
+            >
               Виконано ✅
             </button>
 
-           <button
-  onClick={refuse}
-  disabled={!isMyTurn}
->
-  Відмовляюсь ❌
-</button>
+            <button
+              disabled={!isMyTurn}
+              onClick={refuse}
+            >
+              Відмовляюсь ❌
+            </button>
           </div>
         </div>
       )}
 
-      {/* ШТРАФ */}
       {penalty && (
-        <div className="card">
-          <h2 style={{ whiteSpace: "pre-line" }}>
+        <div
+          className={`card ${
+            showCard ? "card-show" : "card-hide"
+          }`}
+        >
+          <h2
+            style={{
+              whiteSpace: "pre-line",
+            }}
+          >
             {penalty}
           </h2>
 
           <button
-  disabled={!isMyTurn}
-  onClick={() => {
-    setCard(null);
-    nextTurn();
-  }}
+            style={{ marginTop: 20 }}
+            disabled={!isMyTurn}
+            onClick={() => {
+              setCard(null);
+              nextTurn();
+            }}
           >
             Ок, далі ➜
           </button>
         </div>
       )}
 
-      {/* Наступний хід */}
       {!card && !penalty && (
         <button
-  onClick={nextTurn}
-  disabled={!isMyTurn}
->
-  Наступний гравець ➜
-</button>
+          onClick={nextTurn}
+          disabled={!isMyTurn}
+        >
+          Наступний гравець ➜
+        </button>
       )}
 
-      {/* Вихід */}
-      <button onClick={() => setScreen("room")}>
+      <button
+        style={{
+          marginTop: 10,
+        }}
+        onClick={() => setScreen("room")}
+      >
         Вийти
       </button>
     </div>

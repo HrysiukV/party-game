@@ -99,30 +99,28 @@ transform:scale(.97);
 
 }
 
-.card{
+.card {
+  width: 360px;
+  padding: 28px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 28px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 15px 60px rgba(0,0,0,.45);
+  animation: pop .35s;
+  transition:
+    transform .35s ease,
+    opacity .35s ease;
+}
 
-width:360px;
+.card-hide {
+  opacity: 0;
+  transform: scale(0.8) rotateY(90deg);
+}
 
-padding:28px;
-
-background:
-
-rgba(255,255,255,.06);
-
-border:
-
-1px solid rgba(255,255,255,.08);
-
-border-radius:28px;
-
-backdrop-filter:blur(20px);
-
-box-shadow:
-
-0 15px 60px rgba(0,0,0,.45);
-
-animation:pop .35s;
-
+.card-show {
+  opacity: 1;
+  transform: scale(1) rotateY(0deg);
 }
 
 input {

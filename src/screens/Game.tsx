@@ -150,12 +150,12 @@ function Game({
 )}
 
       <div className="game-top-right">
-  <button
-    className="exit-button"
-    onClick={leaveRoom}
-  >
-    🚪 Вийти
-  </button>
+ <button
+  className="top-badge exit-button"
+  onClick={leaveRoom}
+>
+  🚪 Вийти
+</button>
 </div>
     </div>
   );

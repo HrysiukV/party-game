@@ -221,28 +221,6 @@ background:#111;
 
 }
 
-.room-badge {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-
-  padding: 8px 14px;
-
-  background: rgba(255,255,255,.08);
-
-  border: 1px solid rgba(255,255,255,.12);
-
-  backdrop-filter: blur(12px);
-
-  border-radius:20px;
-
-  color:#aaa;
-
-  font-size:14px;
-
-  box-shadow:
-  0 8px 30px rgba(0,0,0,.35);
-}
 
 .game-top-right {
   position: fixed;
@@ -250,12 +228,16 @@ background:#111;
   right: 20px;
 }
 
+.top-badge {
+  position: fixed;
+  top: 20px;
 
-.exit-button {
-  width: auto;
-  min-width: 120px;
+  width: 130px;
+  height: 38px;
 
-  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   border-radius: 20px;
 
@@ -269,10 +251,22 @@ background:#111;
 
   font-size: 14px;
 
-  box-shadow: 
-    0 8px 30px rgba(0,0,0,.35);
+  letter-spacing: 1px;
+
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
 
   transition: .25s;
+}
+
+
+.room-badge {
+  left: 20px;
+}
+
+
+.exit-button {
+  right: 20px;
+  cursor: pointer;
 }
 
 
@@ -280,7 +274,6 @@ background:#111;
   background: rgba(255,255,255,0.15);
   transform: scale(1.05);
 }
-
 
 .next-button {
   margin-top: 25px;

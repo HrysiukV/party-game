@@ -252,7 +252,7 @@ async function createRoom() {
 
   const random =
   penalties.length
-    ? penalties[Math.floor(Math.random() * penalties.length)]
+    ? penalties[Math.floor(Math.random() * penalties.length)].text
     : "Випий 1 ковток 🍺";
 
   await updateDoc(doc(db, "rooms", room), {

@@ -4,6 +4,10 @@ import Admin from "./screens/Admin.tsx";
 import Room from "./screens/Room";
 import Players from "./screens/Players";
 import Game from "./screens/Game";
+import { useRoom } from "./hooks/useRoom";
+import {
+  createRoom as createRoomService,
+} from "./services/roomService";
 
 import {
   addTruth,
@@ -16,7 +20,7 @@ import {
 
 import {
   doc,
-  setDoc,
+ // setDoc,
   getDoc,
   updateDoc,
   onSnapshot,
@@ -24,6 +28,14 @@ import {
   arrayUnion,
   deleteDoc,
 } from "firebase/firestore";
+
+//import {
+//  createRoom as createRoomService,
+//  getRoom,
+//  updateRoom,
+//  addPlayerToRoom,
+// removeRoom,
+//} from "./services/roomService";
 
 import { db } from "./services/firebase";
 
@@ -45,9 +57,27 @@ function App() {
  const [screen, setScreen] = useState<  "room" | "players" | "game" | "admin">("room");
 
   // ROOM
-  const [room, setRoom] = useState<string | null>(null);
+  const {
+  room,
+  setRoom,
+  roomInput,
+  setRoomInput,
 
-  const [roomInput, setRoomInput] = useState("");
+  players,
+  setPlayers,
+
+  currentPlayerId,
+  setCurrentPlayerId,
+
+  hostId,
+  setHostId,
+
+  card,
+  setCard,
+
+  penalty,
+  setPenalty,
+} = useRoom();
 
   // GAME STATE (SYNC FIREBASE)
   type Player = {
@@ -55,15 +85,6 @@ function App() {
   name: string;
 };
 
-const [players, setPlayers] = useState<Player[]>([]);
-const [currentPlayerId, setCurrentPlayerId] =
-  useState<string | null>(null);
-
-  const [hostId, setHostId] =
-  useState<string | null>(null);
-
-  const [card, setCard] = useState<string | null>(null);
-  const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);
 const [name, setName] = useState("");
 
@@ -147,17 +168,15 @@ useEffect(() => {
 
   // CREATE ROOM
 async function createRoom() {
-  const code = Math.random().toString(36).substring(2, 7).toUpperCase();
+  const code = Math.random()
+    .toString(36)
+    .substring(2, 7)
+    .toUpperCase();
 
-  await setDoc(doc(db, "rooms", code), {
-    hostId: userId,
-    players: [],
-    currentPlayerId: null,
-    card: null,
-    penalty: null,
-    started: false,
-    createdAt: Date.now(),
-  });
+  await createRoomService(
+    code,
+    userId
+  );
 
   setRoom(code);
   setScreen("players");

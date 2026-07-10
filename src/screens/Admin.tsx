@@ -54,7 +54,7 @@ const [view, setView] = useState<
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 8,
+        gap: 10,
         marginBottom: 10,
         padding: 12,
         border: "1px solid #444",
@@ -64,7 +64,9 @@ const [view, setView] = useState<
       <div
         style={{
           flex: 1,
-          whiteSpace: "pre-wrap",
+          color: "#fff",
+          fontSize: 16,
+          lineHeight: 1.4,
           wordBreak: "break-word",
           overflowWrap: "anywhere",
         }}
@@ -75,16 +77,17 @@ const [view, setView] = useState<
       <button
         onClick={() => onDelete(item.id)}
         style={{
-          width: 34,
-          height: 34,
-          minWidth: 34,
+          width: 32,
+          height: 32,
+          minWidth: 32,
+          flexShrink: 0,
           padding: 0,
           fontSize: 16,
-          flexShrink: 0,
           borderRadius: 8,
+          cursor: "pointer",
         }}
       >
-        🗑
+        🗑️
       </button>
     </div>
   );
@@ -158,7 +161,7 @@ const [view, setView] = useState<
       <div
   style={{
     display: "flex",
-    gap: 8,
+    gap: 6,
     marginTop: 10,
     marginBottom: 20,
   }}
@@ -167,36 +170,38 @@ const [view, setView] = useState<
     onClick={() => setView("truth")}
     style={{
       flex: 1,
-      background:
-        view === "truth" ? "#7c3aed" : "#333",
+      padding: "6px",
+      fontSize: 11,
+      background: view === "truth" ? "#7c3aed" : "#333",
     }}
   >
-    🧠 Правда ({truths.length})
+    🧠 Правда
   </button>
 
   <button
     onClick={() => setView("dare")}
     style={{
       flex: 1,
-      background:
-        view === "dare" ? "#7c3aed" : "#333",
+      padding: "6px",
+      fontSize: 11,
+      background: view === "dare" ? "#7c3aed" : "#333",
     }}
   >
-    🔥 Дія ({dares.length})
+    🔥 Дія
   </button>
 
   <button
     onClick={() => setView("penalty")}
     style={{
       flex: 1,
-      background:
-        view === "penalty" ? "#7c3aed" : "#333",
+      padding: "6px",
+      fontSize: 11,
+      background: view === "penalty" ? "#7c3aed" : "#333",
     }}
   >
-    ⚠️ Штраф ({penalties.length})
+    ⚠️ Штраф
   </button>
 </div>
-
       <hr />
 
       {view === "truth" &&

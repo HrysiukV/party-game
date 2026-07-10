@@ -148,15 +148,15 @@ function Game({
     Наступний гравець ➜
   </button>
 )}
-
       <div className="game-top-right">
- <button
-  className="top-badge exit-button"
-  onClick={leaveRoom}
->
-  🚪 Вийти
-</button>
-</div>
+        <button
+          className="top-badge exit-button"
+          onClick={leaveRoom}
+        >
+          🚪 Вийти
+        </button>
+      </div>
+
     </div>
   );
 }

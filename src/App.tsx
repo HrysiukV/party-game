@@ -10,6 +10,7 @@ import {
   createRoom as createRoomService,
   getRoom,
   addPlayerToRoom,
+  removePlayerFromRoom,
 } from "./services/roomService";
 
 import {
@@ -23,12 +24,9 @@ import {
 
 import {
   doc,
- // setDoc,
-  getDoc,
   updateDoc,
   onSnapshot,
-  collection,
-  deleteDoc,
+  collection
 } from "firebase/firestore";
 
 //import {
@@ -82,10 +80,10 @@ function App() {
 } = useRoom();
 
   // GAME STATE (SYNC FIREBASE)
-  type Player = {
-  id: string;
-  name: string;
-};
+  //type Player = {
+  //id: string;
+  //name: string;
+//};
 
 const [showJoin, setShowJoin] = useState(false);
 const [name, setName] = useState("");
@@ -204,11 +202,6 @@ async function createRoom() {
   setScreen("players");
 }
 
-
-
-
-
-
   // ADD PLAYER
   async function addPlayer() {
   if (!room || !name.trim()) return;
@@ -232,36 +225,19 @@ async function createRoom() {
 async function leaveRoom() {
   if (!room) return;
 
-  const roomRef = doc(db, "rooms", room);
-  const snap = await getDoc(roomRef);
-
-  if (!snap.exists()) return;
-
-  const data = snap.data();
-
-  const updatedPlayers = (data.players || []).filter(
-    (player: Player) => player.id !== userId
+  await removePlayerFromRoom(
+    room,
+    userId
   );
 
-  // Якщо нікого не залишилось — видаляємо кімнату
-  if (updatedPlayers.length === 0) {
-    await deleteDoc(roomRef);
-  } else {
-    await updateDoc(roomRef, {
-      players: updatedPlayers,
-    });
-  }
-setRoom(null);
-setPlayers([]);
-setCurrentPlayerId(null);
-setCard(null);
-setPenalty(null);
+  setRoom(null);
+  setName("");
+  setPlayers([]);
+  setCurrentPlayerId(null);
+  setCard(null);
+  setPenalty(null);
 
-setName("");
-setRoomInput("");
-setShowJoin(false);
-
-setScreen("room");
+  setScreen("room");
 }
 
   // START GAME

@@ -5,8 +5,8 @@ import {
   setDoc,
   getDoc,
   updateDoc,
-  deleteDoc,
   arrayUnion,
+  deleteDoc,
 } from "firebase/firestore";
 
 
@@ -69,5 +69,37 @@ export async function addPlayerToRoom(
       }),
     }
   );
+}
+
+export async function removePlayerFromRoom(
+  roomCode: string,
+  userId: string
+) {
+  const roomRef = doc(db, "rooms", roomCode);
+
+  const snap = await getDoc(roomRef);
+
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+
+  const players = (data.players || []).filter(
+    (player: {
+      id: string;
+      name: string;
+    }) => player.id !== userId
+  );
+
+
+  // якщо нікого не залишилось
+  if (players.length === 0) {
+    await deleteDoc(roomRef);
+    return;
+  }
+
+
+  await updateDoc(roomRef, {
+    players,
+  });
 }
 

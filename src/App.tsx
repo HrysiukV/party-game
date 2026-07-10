@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Admin from "./screens/Admin.tsx";
-import { deleteDoc } from "firebase/firestore";
 import Room from "./screens/Room";
 import Players from "./screens/Players";
 import Game from "./screens/Game";
+
+import {
+  addTruth,
+  addDare,
+  addPenalty,
+  deleteTruth,
+  deleteDare,
+  deletePenalty,
+} from "./services/questions";
 
 import {
   doc,
@@ -13,7 +21,6 @@ import {
   updateDoc,
   onSnapshot,
   collection,
-  addDoc,
   arrayUnion,
 } from "firebase/firestore";
 
@@ -40,24 +47,6 @@ function App() {
   id: string;
   name: string;
 };
-
-async function updateTruth(id: string, text: string) {
-  await updateDoc(doc(db, "truths", id), {
-    text
-  });
-}
-
-async function updateDare(id: string, text: string) {
-  await updateDoc(doc(db, "dares", id), {
-    text
-  });
-}
-
-async function updatePenalty(id: string, text: string) {
-  await updateDoc(doc(db, "penalties", id), {
-    text
-  });
-}
 
 const [players] = useState<Player[]>([]);
 const [currentPlayerId] = useState<string | null>(null);
@@ -251,36 +240,6 @@ async function createRoom() {
   });
 }
 
-async function addTruth(text: string) {
-  await addDoc(collection(db, "truths"), {
-    text,
-  });
-}
-
-async function addDare(text: string) {
-  await addDoc(collection(db, "dares"), {
-    text,
-  });
-}
-
-async function addPenalty(text: string) {
-  await addDoc(collection(db, "penalties"), {
-    text,
-  });
-}
-
-async function deleteTruth(id: string) {
-  await deleteDoc(doc(db, "truths", id));
-}
-
-async function deleteDare(id: string) {
-  await deleteDoc(doc(db, "dares", id));
-}
-
-async function deletePenalty(id: string) {
-  await deleteDoc(doc(db, "penalties", id));
-}
-
 
   // SCREENS
   if (screen === "room") {
@@ -337,9 +296,6 @@ if (screen === "admin") {
   deleteTruth={deleteTruth}
   deleteDare={deleteDare}
   deletePenalty={deletePenalty}
-  updateTruth={updateTruth}
-  updateDare={updateDare}
-  updatePenalty={updatePenalty}
   goBack={() => setScreen("room")}
 />
   );

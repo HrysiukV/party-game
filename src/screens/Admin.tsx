@@ -18,10 +18,6 @@ type Props = {
   deleteDare: (id: string) => void;
   deletePenalty: (id: string) => void;
 
-  updateTruth: (id: string, text: string) => void;
-updateDare: (id: string, text: string) => void;
-updatePenalty: (id: string, text: string) => void;
-
   goBack: () => void;
 };
 
@@ -36,94 +32,50 @@ function Admin({
   deleteDare,
   deletePenalty,
   goBack,
-  updateTruth,
-  updateDare,
-  updatePenalty,
 }: Props) {
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
-  const [type, setType] = useState<"truth" | "dare" | "penalty">("truth");
 
-  const [editId, setEditId] = useState<string | null>(null);
-  const [editText, setEditText] = useState("");
-
-  console.log("truths:", truths);
-console.log("dares:", dares);
-console.log("penalties:", penalties);
+  const [type, setType] = useState<
+    "truth" | "dare" | "penalty"
+  >("truth");
 
   function renderItem(
-  item: Item,
-  onDelete: (id: string) => void,
-  onUpdate: (id: string, text: string) => void
-) {
-  const isEditing = editId === item.id;
-console.log("truths:", truths);
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 8,
-        padding: 10,
-        border: "1px solid #333",
-        borderRadius: 10,
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        {isEditing ? (
-          <input
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            style={{ width: "100%" }}
-          />
-        ) : (
-          <span style={{ wordBreak: "break-word" }}>
-            {item.text}
-          </span>
-        )}
+    item: Item,
+    onDelete: (id: string) => void
+  ) {
+    return (
+      <div
+        key={item.id}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 10,
+          padding: 12,
+          border: "1px solid #444",
+          borderRadius: 10,
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+          }}
+        >
+          {item.text}
+        </div>
+
+        <button
+          onClick={() => onDelete(item.id)}
+        >
+          🗑
+        </button>
       </div>
-
-      <div style={{ display: "flex", gap: 6, marginLeft: 10 }}>
-        {isEditing ? (
-          <>
-            <button
-              onClick={() => {
-                if (!editText.trim()) return;
-
-                onUpdate(item.id, editText.trim());
-
-                setEditId(null);
-                setEditText("");
-              }}
-            >
-              💾
-            </button>
-
-            <button onClick={() => setEditId(null)}>
-              ❌
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={() => {
-                setEditId(item.id);
-                setEditText(item.text);
-              }}
-            >
-              ✏️
-            </button>
-
-            <button onClick={() => onDelete(item.id)}>
-              🗑
-            </button>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="app">
@@ -132,27 +84,47 @@ console.log("truths:", truths);
       <select
         value={type}
         onChange={(e) =>
-          setType(e.target.value as "truth" | "dare" | "penalty")
+          setType(
+            e.target.value as
+              | "truth"
+              | "dare"
+              | "penalty"
+          )
         }
       >
-        <option value="truth">🧠 Правда</option>
-        <option value="dare">🔥 Дія</option>
-        <option value="penalty">⚠️ Штраф</option>
+        <option value="truth">
+          🧠 Правда
+        </option>
+
+        <option value="dare">
+          🔥 Дія
+        </option>
+
+        <option value="penalty">
+          ⚠️ Штраф
+        </option>
       </select>
 
       <input
         value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Введіть текст..."
+        onChange={(e) =>
+          setText(e.target.value)
+        }
+        placeholder="Нове завдання..."
       />
 
       <button
         onClick={() => {
           if (!text.trim()) return;
 
-          if (type === "truth") addTruth(text.trim());
-          if (type === "dare") addDare(text.trim());
-          if (type === "penalty") addPenalty(text.trim());
+          if (type === "truth")
+            addTruth(text.trim());
+
+          if (type === "dare")
+            addDare(text.trim());
+
+          if (type === "penalty")
+            addPenalty(text.trim());
 
           setText("");
         }}
@@ -164,40 +136,68 @@ console.log("truths:", truths);
 
       <input
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) =>
+          setSearch(e.target.value)
+        }
         placeholder="🔍 Пошук..."
       />
 
       <p>
-        🧠 {truths.length} | 🔥 {dares.length} | ⚠️ {penalties.length}
+        🧠 {truths.length} |
+        🔥 {dares.length} |
+        ⚠️ {penalties.length}
       </p>
 
       <hr />
-<div>
-  <h2>🧠 Правда</h2>
 
-  {truths.map((item) =>
-    renderItem(item, deleteTruth, updateTruth)
-  )}
+      <h2>🧠 Правда</h2>
 
-  <hr />
+      {truths
+        .filter((item) =>
+          item.text
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        )
+        .map((item) =>
+          renderItem(item, deleteTruth)
+        )}
 
-  <h2>🔥 Дія</h2>
+      <hr />
 
-  {dares.map((item) =>
-    renderItem(item, deleteDare, updateDare)
-  )}
+      <h2>🔥 Дія</h2>
 
-  <hr />
+      {dares
+        .filter((item) =>
+          item.text
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        )
+        .map((item) =>
+          renderItem(item, deleteDare)
+        )}
+              <hr />
 
-  <h2>⚠️ Штраф</h2>
+      <h2>⚠️ Штраф</h2>
 
-  {penalties.map((item) =>
-    renderItem(item, deletePenalty, updatePenalty)
-  )}
-</div>
+      {penalties
+        .filter((item) =>
+          item.text
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        )
+        .map((item) =>
+          renderItem(item, deletePenalty)
+        )}
 
-      <button onClick={goBack} style={{ marginTop: 20 }}>
+      <hr />
+
+      <button
+        onClick={goBack}
+        style={{
+          marginTop: 20,
+          width: "100%",
+        }}
+      >
         ⬅ Назад
       </button>
     </div>

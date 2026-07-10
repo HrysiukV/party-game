@@ -140,22 +140,23 @@ function Game({
       )}
 
       {!card && !penalty && (
-        <button
-          onClick={nextTurn}
-          disabled={!isMyTurn}
-        >
-          Наступний гравець ➜
-        </button>
-      )}
+  <button
+    className="next-button"
+    onClick={nextTurn}
+    disabled={!isMyTurn}
+  >
+    Наступний гравець ➜
+  </button>
+)}
 
-      <button
-  style={{
-    marginTop: 10,
-  }}
-  onClick={leaveRoom}
->
-  🚪 Вийти
-</button>
+      <div className="game-top-right">
+  <button
+    className="exit-button"
+    onClick={leaveRoom}
+  >
+    🚪 Вийти
+  </button>
+</div>
     </div>
   );
 }

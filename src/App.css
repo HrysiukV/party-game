@@ -228,19 +228,60 @@ background:#111;
 
   padding: 8px 14px;
 
+  background: rgba(255,255,255,.08);
+
+  border: 1px solid rgba(255,255,255,.12);
+
+  backdrop-filter: blur(12px);
+
+  border-radius:20px;
+
+  color:#aaa;
+
+  font-size:14px;
+
+  box-shadow:
+  0 8px 30px rgba(0,0,0,.35);
+}
+
+.game-top-right {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+
+.exit-button {
+  width: auto;
+  min-width: 120px;
+
+  padding: 8px 16px;
+
+  border-radius: 20px;
+
   background: rgba(255,255,255,0.08);
+
   border: 1px solid rgba(255,255,255,0.12);
 
   backdrop-filter: blur(12px);
 
-  border-radius: 20px;
-
   color: #aaa;
 
   font-size: 14px;
-  letter-spacing: 1px;
 
-  box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  box-shadow: 
+    0 8px 30px rgba(0,0,0,.35);
 
-  animation: fadeIn .3s ease;
+  transition: .25s;
+}
+
+
+.exit-button:hover {
+  background: rgba(255,255,255,0.15);
+  transform: scale(1.05);
+}
+
+
+.next-button {
+  margin-top: 25px;
 }

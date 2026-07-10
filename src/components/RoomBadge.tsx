@@ -7,8 +7,8 @@ function RoomBadge({ room }: Props) {
 
   return (
     <div className="room-badge">
-      🏠 {room}
-    </div>
+  🏠 {room}
+</div>
   );
 }
 

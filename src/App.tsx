@@ -48,8 +48,10 @@ function App() {
   name: string;
 };
 
-const [players] = useState<Player[]>([]);
-const [currentPlayerId] = useState<string | null>(null);
+const [players, setPlayers] = useState<Player[]>([]);
+const [currentPlayerId, setCurrentPlayerId] =
+  useState<string | null>(null);
+
   const [card, setCard] = useState<string | null>(null);
   const [penalty, setPenalty] = useState<string | null>(null);
 const [showJoin, setShowJoin] = useState(false);
@@ -106,6 +108,26 @@ useEffect(() => {
     unsubPenalties();
   };
 }, []);
+
+useEffect(() => {
+  if (!room) return;
+
+  const unsub = onSnapshot(
+    doc(db, "rooms", room),
+    (snap) => {
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+
+      setPlayers(data.players || []);
+      setCurrentPlayerId(data.currentPlayerId || null);
+      setCard(data.card || null);
+      setPenalty(data.penalty || null);
+    }
+  );
+
+  return () => unsub();
+}, [room]);
 
   // CREATE ROOM
 async function createRoom() {

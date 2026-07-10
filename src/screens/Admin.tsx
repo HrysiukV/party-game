@@ -41,41 +41,50 @@ function Admin({
   >("truth");
 
   function renderItem(
-    item: Item,
-    onDelete: (id: string) => void
-  ) {
-    return (
+  item: Item,
+  onDelete: (id: string) => void
+) {
+  return (
+    <div
+      key={item.id}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        marginBottom: 10,
+        padding: 12,
+        border: "1px solid #444",
+        borderRadius: 10,
+      }}
+    >
       <div
-        key={item.id}
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 10,
-          marginBottom: 10,
-          padding: 12,
-          border: "1px solid #444",
-          borderRadius: 10,
+          flex: 1,
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
         }}
       >
-        <div
-          style={{
-            flex: 1,
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
-          }}
-        >
-          {item.text}
-        </div>
-
-        <button
-          onClick={() => onDelete(item.id)}
-        >
-          🗑
-        </button>
+        {item.text}
       </div>
-    );
-  }
+
+      <button
+        onClick={() => onDelete(item.id)}
+        style={{
+          width: 34,
+          height: 34,
+          minWidth: 34,
+          padding: 0,
+          fontSize: 16,
+          flexShrink: 0,
+          borderRadius: 8,
+        }}
+      >
+        🗑
+      </button>
+    </div>
+  );
+}
 
   return (
     <div className="app">

@@ -161,31 +161,33 @@ const [view, setView] = useState<
       <div
   style={{
     display: "flex",
+    justifyContent: "center",
     gap: 6,
     marginTop: 10,
     marginBottom: 20,
+    flexWrap: "wrap",
   }}
 >
   <button
     onClick={() => setView("truth")}
     style={{
-      flex: 1,
-      padding: "6px",
-      fontSize: 11,
-      background: view === "truth" ? "#7c3aed" : "#333",
-    }}
+  minWidth: 70,
+  padding: "6px 10px",
+  fontSize: 12,
+  background: view === "truth" ? "#7c3aed" : "#333",
+}}
   >
     🧠 Правда
   </button>
 
   <button
     onClick={() => setView("dare")}
-    style={{
-      flex: 1,
-      padding: "6px",
-      fontSize: 11,
-      background: view === "dare" ? "#7c3aed" : "#333",
-    }}
+   style={{
+  minWidth: 70,
+  padding: "6px 10px",
+  fontSize: 12,
+  background: view === "dare" ? "#7c3aed" : "#333",
+}}
   >
     🔥 Дія
   </button>
@@ -193,11 +195,11 @@ const [view, setView] = useState<
   <button
     onClick={() => setView("penalty")}
     style={{
-      flex: 1,
-      padding: "6px",
-      fontSize: 11,
-      background: view === "penalty" ? "#7c3aed" : "#333",
-    }}
+  minWidth: 70,
+  padding: "6px 10px",
+  fontSize: 12,
+  background: view === "penalty" ? "#7c3aed" : "#333",
+}}
   >
     ⚠️ Штраф
   </button>

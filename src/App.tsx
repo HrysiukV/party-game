@@ -31,7 +31,12 @@ const tg = (window as any).Telegram?.WebApp;
 
 const userId =
   tg?.initDataUnsafe?.user?.id?.toString() ??
-  crypto.randomUUID();
+  localStorage.getItem("userId") ??
+  (() => {
+    const id = crypto.randomUUID();
+    localStorage.setItem("userId", id);
+    return id;
+  })();
 
 const isAdmin = userId === "846617693";
 
@@ -159,33 +164,25 @@ async function createRoom() {
 }
 
   // JOIN ROOM (FIXED)
-  async function joinRoom() {
-    const code = roomInput.trim().toUpperCase();
+ async function joinRoom() {
+  const code = roomInput.trim().toUpperCase();
 
-    if (!code) {
-      alert("Введи код кімнати");
-      return;
-    }
-
-    const roomRef = doc(db, "rooms", code);
-    const roomSnap = await getDoc(roomRef);
-
-    if (!roomSnap.exists()) {
-      alert("Кімната не знайдена");
-      return;
-    }
-
-  const data = roomSnap.data();
-
-setRoom(code);
-
-if (data.started) {
-    setScreen("game");
-} else {
-    setScreen("players");
-}
-
+  if (!code) {
+    alert("Введи код кімнати");
+    return;
   }
+
+  const roomRef = doc(db, "rooms", code);
+  const roomSnap = await getDoc(roomRef);
+
+  if (!roomSnap.exists()) {
+    alert("Кімната не знайдена");
+    return;
+  }
+
+  setRoom(code);
+  setScreen("players");
+}
 
   // ADD PLAYER
   async function addPlayer() {
@@ -206,6 +203,16 @@ if (data.started) {
   name: name.trim(),
 }),
   });
+
+  const snap = await getDoc(doc(db, "rooms", room));
+
+if (snap.exists()) {
+  const data = snap.data();
+
+  if (data.started) {
+    setScreen("game");
+  }
+}
 }
 
 async function leaveRoom() {
@@ -230,13 +237,17 @@ async function leaveRoom() {
       players: updatedPlayers,
     });
   }
+setRoom(null);
+setPlayers([]);
+setCurrentPlayerId(null);
+setCard(null);
+setPenalty(null);
 
-  setRoom(null);
-  setPlayers([]);
-  setCard(null);
-  setPenalty(null);
-  setCurrentPlayerId(null);
-  setScreen("room");
+setName("");
+setRoomInput("");
+setShowJoin(false);
+
+setScreen("room");
 }
 
   // START GAME

@@ -273,10 +273,6 @@ return (
   addPlayer={addPlayer}
   startGame={startGame}
   goBack={goBack}
-  addTruth={addTruth}
-  addDare={addDare}
-  addPenalty={addPenalty}
-  isAdmin={isAdmin}
 />
     );
 

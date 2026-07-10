@@ -68,6 +68,7 @@ type Question = {
 const [truths, setTruths] = useState<Question[]>([]);
 const [dares, setDares] = useState<Question[]>([]);
 const [penalties, setPenalties] = useState<Question[]>([]);
+const [started, setStarted] = useState(false);
 
 const currentPlayer =
   players.find(
@@ -127,6 +128,10 @@ useEffect(() => {
       setCard(data.card || null);
       setPenalty(data.penalty || null);
       setHostId(data.hostId || null);
+      setStarted(data.started || false);
+      if (data.started) {
+  setScreen("game");
+}
     }
   );
 
@@ -143,6 +148,7 @@ async function createRoom() {
     currentPlayerId: null,
     card: null,
     penalty: null,
+    started: false,
     createdAt: Date.now(),
   });
 
@@ -200,8 +206,9 @@ async function createRoom() {
     players[Math.floor(Math.random() * players.length)];
 
   await updateDoc(doc(db, "rooms", room), {
-    currentPlayerId: random.id,
-  });
+  currentPlayerId: random.id,
+  started: true,
+});
 
   setScreen("game");
 }

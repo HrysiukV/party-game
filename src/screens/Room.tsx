@@ -1,15 +1,18 @@
 type Props = {
   roomInput: string;
   setRoomInput: (value: string) => void;
+
   createRoom: () => void;
   joinRoom: () => void;
+
   showJoin: boolean;
   setShowJoin: (value: boolean) => void;
+
   isAdmin: boolean;
   openAdmin: () => void;
 };
 
-export default function Room({
+function Room({
   roomInput,
   setRoomInput,
   createRoom,
@@ -26,12 +29,12 @@ export default function Room({
       <p>Створіть або приєднайтесь до кімнати</p>
 
       <button onClick={createRoom}>
-        Створити кімнату
+        ➕ Створити кімнату
       </button>
 
       {!showJoin ? (
         <button onClick={() => setShowJoin(true)}>
-          Приєднатися
+          🚪 Приєднатися
         </button>
       ) : (
         <>
@@ -42,7 +45,7 @@ export default function Room({
           />
 
           <button onClick={joinRoom}>
-            Увійти
+            ✅ Увійти
           </button>
         </>
       )}
@@ -61,3 +64,5 @@ export default function Room({
     </div>
   );
 }
+
+export default Room;

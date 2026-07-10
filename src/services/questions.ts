@@ -36,3 +36,31 @@ export async function deleteDare(id: string) {
 export async function deletePenalty(id: string) {
   await deleteDoc(doc(db, "penalties", id));
 }
+
+import { updateDoc } from "firebase/firestore";
+export async function updateTruth(
+  id: string,
+  text: string
+) {
+  await updateDoc(doc(db, "truths", id), {
+    text,
+  });
+}
+
+export async function updateDare(
+  id: string,
+  text: string
+) {
+  await updateDoc(doc(db, "dares", id), {
+    text,
+  });
+}
+
+export async function updatePenalty(
+  id: string,
+  text: string
+) {
+  await updateDoc(doc(db, "penalties", id), {
+    text,
+  });
+}

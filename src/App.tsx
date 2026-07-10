@@ -108,7 +108,6 @@ useEffect(() => {
 }, []);
 
   // CREATE ROOM
-  // CREATE ROOM
 async function createRoom() {
   const code = Math.random().toString(36).substring(2, 7).toUpperCase();
 
@@ -283,7 +282,7 @@ return (
 
     
   }
-  console.log("SCREEN IS:", screen);
+
 if (screen === "admin") {
   return (
     <Admin

@@ -68,7 +68,7 @@ type Question = {
 const [truths, setTruths] = useState<Question[]>([]);
 const [dares, setDares] = useState<Question[]>([]);
 const [penalties, setPenalties] = useState<Question[]>([]);
-const [started, setStarted] = useState(false);
+const [, setStarted] = useState(false);
 
 const currentPlayer =
   players.find(

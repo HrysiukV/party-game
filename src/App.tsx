@@ -9,6 +9,7 @@ import { useRoom } from "./hooks/useRoom";
 import {
   createRoom as createRoomService,
   getRoom,
+  addPlayerToRoom,
 } from "./services/roomService";
 
 import {
@@ -27,7 +28,6 @@ import {
   updateDoc,
   onSnapshot,
   collection,
-  arrayUnion,
   deleteDoc,
 } from "firebase/firestore";
 
@@ -209,7 +209,6 @@ async function createRoom() {
 
 
 
-
   // ADD PLAYER
   async function addPlayer() {
   if (!room || !name.trim()) return;
@@ -223,23 +222,11 @@ async function createRoom() {
     return;
   }
 
-
-  await updateDoc(doc(db, "rooms", room), {
-    players: arrayUnion({
-  id: userId,
-  name: name.trim(),
-}),
-  });
-
-  const snap = await getDoc(doc(db, "rooms", room));
-
-if (snap.exists()) {
-  const data = snap.data();
-
-  if (data.started) {
-    setScreen("game");
-  }
-}
+  await addPlayerToRoom(
+    room,
+    userId,
+    name.trim()
+  );
 }
 
 async function leaveRoom() {

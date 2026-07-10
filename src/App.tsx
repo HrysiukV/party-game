@@ -157,7 +157,9 @@ useEffect(() => {
       setPenalty(data.penalty || null);
       setHostId(data.hostId || null);
       setStarted(data.started || false);
-      if (data.started) {
+      if (data.started && data.players?.some(
+  (p:any)=>p.id===userId
+)) {
   setScreen("game");
 }
     }
@@ -198,8 +200,9 @@ async function createRoom() {
     return;
   }
   
-  setRoom(code);
-  setScreen("players");
+ setRoom(code);
+setName("");
+setScreen("players");
 }
 
   // ADD PLAYER
@@ -231,7 +234,9 @@ async function leaveRoom() {
   );
 
   setRoom(null);
-  setName("");
+  setRoomInput(""); // очищає код кімнати
+  setName(""); // очищає нік
+
   setPlayers([]);
   setCurrentPlayerId(null);
   setCard(null);

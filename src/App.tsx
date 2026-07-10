@@ -5,8 +5,10 @@ import Room from "./screens/Room";
 import Players from "./screens/Players";
 import Game from "./screens/Game";
 import { useRoom } from "./hooks/useRoom";
+
 import {
   createRoom as createRoomService,
+  getRoom,
 } from "./services/roomService";
 
 import {
@@ -191,17 +193,22 @@ async function createRoom() {
     return;
   }
 
-  const roomRef = doc(db, "rooms", code);
-  const roomSnap = await getDoc(roomRef);
+  const roomSnap = await getRoom(code);
 
   if (!roomSnap.exists()) {
     alert("Кімната не знайдена");
     return;
   }
-
+  
   setRoom(code);
   setScreen("players");
 }
+
+
+
+
+
+
 
   // ADD PLAYER
   async function addPlayer() {
@@ -215,6 +222,7 @@ async function createRoom() {
     alert("Ти вже приєднався до кімнати");
     return;
   }
+
 
   await updateDoc(doc(db, "rooms", room), {
     players: arrayUnion({

@@ -13,6 +13,7 @@ type Props = {
   setPenalty: React.Dispatch<React.SetStateAction<string | null>>;
   setScreen: React.Dispatch<React.SetStateAction<Screen>>;
   isMyTurn: boolean;
+  leaveRoom: () => void;
 };
 
 function Game({
@@ -25,7 +26,7 @@ function Game({
   isMyTurn,
   setCard,
   setPenalty,
-  setScreen,
+  leaveRoom,
 }: Props) {
   const [showCard, setShowCard] = useState(false);
 
@@ -144,13 +145,13 @@ function Game({
       )}
 
       <button
-        style={{
-          marginTop: 10,
-        }}
-        onClick={() => setScreen("room")}
-      >
-        Вийти
-      </button>
+  style={{
+    marginTop: 10,
+  }}
+  onClick={leaveRoom}
+>
+  🚪 Вийти
+</button>
     </div>
   );
 }

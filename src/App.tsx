@@ -22,6 +22,7 @@ import {
   onSnapshot,
   collection,
   arrayUnion,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { db } from "./services/firebase";
@@ -40,6 +41,7 @@ function App() {
 
   // ROOM
   const [room, setRoom] = useState<string | null>(null);
+
   const [roomInput, setRoomInput] = useState("");
 
   // GAME STATE (SYNC FIREBASE)
@@ -173,8 +175,16 @@ async function createRoom() {
       return;
     }
 
-    setRoom(code);
+  const data = roomSnap.data();
+
+setRoom(code);
+
+if (data.started) {
+    setScreen("game");
+} else {
     setScreen("players");
+}
+
   }
 
   // ADD PLAYER
@@ -196,6 +206,37 @@ async function createRoom() {
   name: name.trim(),
 }),
   });
+}
+
+async function leaveRoom() {
+  if (!room) return;
+
+  const roomRef = doc(db, "rooms", room);
+  const snap = await getDoc(roomRef);
+
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+
+  const updatedPlayers = (data.players || []).filter(
+    (player: Player) => player.id !== userId
+  );
+
+  // Якщо нікого не залишилось — видаляємо кімнату
+  if (updatedPlayers.length === 0) {
+    await deleteDoc(roomRef);
+  } else {
+    await updateDoc(roomRef, {
+      players: updatedPlayers,
+    });
+  }
+
+  setRoom(null);
+  setPlayers([]);
+  setCard(null);
+  setPenalty(null);
+  setCurrentPlayerId(null);
+  setScreen("room");
 }
 
   // START GAME
@@ -343,6 +384,7 @@ if (screen === "admin") {
   setCard={setCard}
   setPenalty={setPenalty}
   setScreen={setScreen}
+  leaveRoom={leaveRoom}
 />
     );
   }

@@ -36,6 +36,10 @@ function Admin({
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
 
+const [view, setView] = useState<
+  "truth" | "dare" | "penalty"
+>("truth");
+
   const [type, setType] = useState<
     "truth" | "dare" | "penalty"
   >("truth");
@@ -151,54 +155,82 @@ function Admin({
         placeholder="🔍 Пошук..."
       />
 
-      <p>
-        🧠 {truths.length} |
-        🔥 {dares.length} |
-        ⚠️ {penalties.length}
-      </p>
+      <div
+  style={{
+    display: "flex",
+    gap: 8,
+    marginTop: 10,
+    marginBottom: 20,
+  }}
+>
+  <button
+    onClick={() => setView("truth")}
+    style={{
+      flex: 1,
+      background:
+        view === "truth" ? "#7c3aed" : "#333",
+    }}
+  >
+    🧠 Правда ({truths.length})
+  </button>
+
+  <button
+    onClick={() => setView("dare")}
+    style={{
+      flex: 1,
+      background:
+        view === "dare" ? "#7c3aed" : "#333",
+    }}
+  >
+    🔥 Дія ({dares.length})
+  </button>
+
+  <button
+    onClick={() => setView("penalty")}
+    style={{
+      flex: 1,
+      background:
+        view === "penalty" ? "#7c3aed" : "#333",
+    }}
+  >
+    ⚠️ Штраф ({penalties.length})
+  </button>
+</div>
 
       <hr />
 
-      <h2>🧠 Правда</h2>
+      {view === "truth" &&
+  truths
+    .filter((item) =>
+      item.text
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+    .map((item) =>
+      renderItem(item, deleteTruth)
+    )}
 
-      {truths
-        .filter((item) =>
-          item.text
-            .toLowerCase()
-            .includes(search.toLowerCase())
-        )
-        .map((item) =>
-          renderItem(item, deleteTruth)
-        )}
+{view === "dare" &&
+  dares
+    .filter((item) =>
+      item.text
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+    .map((item) =>
+      renderItem(item, deleteDare)
+    )}
 
-      <hr />
-
-      <h2>🔥 Дія</h2>
-
-      {dares
-        .filter((item) =>
-          item.text
-            .toLowerCase()
-            .includes(search.toLowerCase())
-        )
-        .map((item) =>
-          renderItem(item, deleteDare)
-        )}
-              <hr />
-
-      <h2>⚠️ Штраф</h2>
-
-      {penalties
-        .filter((item) =>
-          item.text
-            .toLowerCase()
-            .includes(search.toLowerCase())
-        )
-        .map((item) =>
-          renderItem(item, deletePenalty)
-        )}
-
-      <hr />
+{view === "penalty" &&
+  penalties
+    .filter((item) =>
+      item.text
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+    .map((item) =>
+      renderItem(item, deletePenalty)
+    )}
 
       <button
         onClick={goBack}

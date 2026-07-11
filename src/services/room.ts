@@ -33,7 +33,8 @@ const avatars = [
 
 export async function createRoom(
   roomCode: string,
-  hostId: string
+  hostId: string,
+  mode: string
 ) {
   await setDoc(doc(db, "rooms", roomCode), {
     hostId,
@@ -43,6 +44,7 @@ export async function createRoom(
     penalty: null,
     started: false,
     createdAt: Date.now(),
+    mode,
   });
 }
 

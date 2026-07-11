@@ -8,4 +8,5 @@ export type RoomData = {
   penalty: string | null;
   started: boolean;
   createdAt: number;
+  mode: string;
 };

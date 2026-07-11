@@ -123,7 +123,8 @@ async function createRoom() {
 
   await createRoomService(
     code,
-    userId
+    userId,
+    selectedMode
   );
 
   setRoom(code);

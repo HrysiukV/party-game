@@ -18,6 +18,7 @@ type Props = {
   leaveRoom: () => void;
   room: string | null;
   playersCount: number;
+    mode: string;
 };
 
 function Game({

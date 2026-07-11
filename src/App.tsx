@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import Admin from "./screens/Admin.tsx";
 import Room from "./screens/Room";
@@ -6,6 +6,8 @@ import Players from "./screens/Players";
 import Game from "./screens/Game";
 import { useRoom } from "./hooks/useRoom";
 import { useQuestions } from "./hooks/useQuestions";
+import { useGame } from "./hooks/useGame";
+import { useRoomListener } from "./hooks/useRoomListener";
 
 import {
   createRoom as createRoomService,
@@ -26,7 +28,6 @@ import {
 import {
   doc,
   updateDoc,
-  onSnapshot,
 } from "firebase/firestore";
 
 import { db } from "./services/firebase";
@@ -78,14 +79,26 @@ const {
   penalties
 } = useQuestions(mode);
 
+const {
+  drawCard,
+  nextTurn,
+  refuse,
+} = useGame({
+  room,
+  players,
+  currentPlayerId,
+  truths,
+  dares,
+  penalties,
+  mode,
+});
+
 const [showJoin, setShowJoin] = useState(false);
 
 const [selectedMode, setSelectedMode] =
   useState("classic");
 
 const [name, setName] = useState("");
-
-const [, setStarted] = useState(false);
 
 const currentPlayer =
   players.find(
@@ -94,33 +107,20 @@ const currentPlayer =
 
   const isMyTurn = currentPlayerId === userId;
 
-useEffect(() => {
-  if (!room) return;
+  useRoomListener({
+  room,
 
-  const unsub = onSnapshot(
-    doc(db, "rooms", room),
-    (snap) => {
-      if (!snap.exists()) return;
+  setPlayers,
+  setCurrentPlayerId,
+  setCard,
+  setPenalty,
+  setHostId,
+  setMode,
 
-      const data = snap.data();
+  setScreen,
 
-      setPlayers(data.players || []);
-      setCurrentPlayerId(data.currentPlayerId || null);
-      setCard(data.card || null);
-      setPenalty(data.penalty || null);
-      setHostId(data.hostId || null);
-      setMode(data.mode || "classic");
-      setStarted(data.started || false);
-      if (data.started && data.players?.some(
-  (p:any)=>p.id===userId
-)) {
-  setScreen("game");
-}
-    }
-  );
-
-  return () => unsub();
-}, [room]);
+  userId,
+});
 
   // CREATE ROOM
 async function createRoom() {
@@ -214,67 +214,6 @@ async function leaveRoom() {
 
   setScreen("game");
 }
-
-  // NEXT TURN
-  async function nextTurn() {
-  if (!room || players.length === 0) return;
-
-  const currentIndex = players.findIndex(
-    (player) => player.id === currentPlayerId
-  );
-
-  const nextIndex =
-    currentIndex === players.length - 1
-      ? 0
-      : currentIndex + 1;
-
-  await updateDoc(doc(db, "rooms", room), {
-    currentPlayerId: players[nextIndex].id,
-    card: null,
-    penalty: null,
-  });
-}
-
-  // DRAW CARD
-  async function drawCard() {
-  if (!room) return;
-
-  const type = Math.random() < 0.5 ? "truth" : "dare";
-
-  const list = type === "truth" ? truths : dares;
-
-  if (list.length === 0) return;
-
-  const randomItem =
-    list[Math.floor(Math.random() * list.length)];
-
-  const text =
-    type === "truth"
-      ? `🧠 ПРАВДА\n\n${randomItem.text}`
-      : `🔥 ДІЯ\n\n${randomItem.text}`;
-
-  await updateDoc(doc(db, "rooms", room), {
-    card: text,
-    penalty: null,
-  });
-}
-
-  // REFUSE
- async function refuse() {
-  if (!room) return;
-
-  const random =
-  penalties.length
-    ? penalties[Math.floor(Math.random() * penalties.length)].text
-    : "Випий 1 ковток 🍺";
-
-  await updateDoc(doc(db, "rooms", room), {
-    penalty: "⚠️ ШТРАФ:\n\n" + random,
-    card: null,
-  });
-}
-
-
   // SCREENS
   if (screen === "room") {
     return (
@@ -354,6 +293,7 @@ if (screen === "admin") {
   leaveRoom={leaveRoom}
   room={room}
  playersCount={players.length}
+ mode={mode}
 />
     );
   }

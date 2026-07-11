@@ -4,7 +4,7 @@ type Props = {
   roomInput: string;
   setRoomInput: (value: string) => void;
 
-  createRoom: () => void;
+  createRoom: (mode: string) => void;
   joinRoom: () => void;
 
   showJoin: boolean;
@@ -16,6 +16,7 @@ type Props = {
   selectedMode: string;
 
 setSelectedMode: (mode: string) => void;
+
 };
 
 function Room({
@@ -87,9 +88,11 @@ setSelectedMode,
   ))}
 </div>
 
-      <button onClick={createRoom}>
-        ➕ Створити кімнату
-      </button>
+      <button
+  onClick={() => createRoom(selectedMode)}
+>
+  ➕ Створити кімнату
+</button>
 
       {!showJoin ? (
         <button onClick={() => setShowJoin(true)}>

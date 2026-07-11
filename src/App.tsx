@@ -5,13 +5,14 @@ import Room from "./screens/Room";
 import Players from "./screens/Players";
 import Game from "./screens/Game";
 import { useRoom } from "./hooks/useRoom";
+import { useQuestions } from "./hooks/useQuestions";
 
 import {
   createRoom as createRoomService,
   getRoom,
-  addPlayerToRoom,
-  removePlayerFromRoom,
-} from "./services/roomService";
+  addPlayer as addPlayerService,
+  removePlayer,
+} from "./services/room";
 
 import {
   addTruth,
@@ -26,7 +27,6 @@ import {
   doc,
   updateDoc,
   onSnapshot,
-  collection
 } from "firebase/firestore";
 
 import { db } from "./services/firebase";
@@ -47,7 +47,7 @@ const isAdmin = userId === "846617693";
 function App() {
   // UI
  const [screen, setScreen] = useState<  "room" | "players" | "game" | "admin">("room");
-
+const { truths, dares, penalties } = useQuestions();
   // ROOM
   const {
   room,
@@ -78,14 +78,6 @@ const [selectedMode, setSelectedMode] =
 
 const [name, setName] = useState("");
 
-type Question = {
-  id: string;
-  text: string;
-};
-
-const [truths, setTruths] = useState<Question[]>([]);
-const [dares, setDares] = useState<Question[]>([]);
-const [penalties, setPenalties] = useState<Question[]>([]);
 const [, setStarted] = useState(false);
 
 const currentPlayer =
@@ -94,42 +86,6 @@ const currentPlayer =
   )?.name ?? null;
 
   const isMyTurn = currentPlayerId === userId;
-
-  // REALTIME LISTENER
-useEffect(() => {
-  const unsubTruths = onSnapshot(collection(db, "truths"), (snapshot) => {
-    setTruths(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        text: doc.data().text || "",
-      }))
-    );
-  });
-
-  const unsubDares = onSnapshot(collection(db, "dares"), (snapshot) => {
-    setDares(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        text: doc.data().text || "",
-      }))
-    );
-  });
-
-  const unsubPenalties = onSnapshot(collection(db, "penalties"), (snapshot) => {
-    setPenalties(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        text: doc.data().text || "",
-      }))
-    );
-  });
-
-  return () => {
-    unsubTruths();
-    unsubDares();
-    unsubPenalties();
-  };
-}, []);
 
 useEffect(() => {
   if (!room) return;
@@ -208,17 +164,17 @@ setScreen("players");
     return;
   }
 
-  await addPlayerToRoom(
+  await addPlayerService(
     room,
     userId,
     name.trim()
-  );
+);
 }
 
 async function leaveRoom() {
   if (!room) return;
 
-  await removePlayerFromRoom(
+  await removePlayer(
     room,
     userId
   );

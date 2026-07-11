@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { GameMode } from "../types/GameMode";
 import type { Player } from "../types/Player";
 
 export function useRoom() {
@@ -19,7 +20,8 @@ export function useRoom() {
   const [penalty, setPenalty] =
     useState<string | null>(null);
 
-  const [mode, setMode] = useState("classic");
+  const [mode, setMode] =
+  useState<GameMode>("classic");
 
   
   return {

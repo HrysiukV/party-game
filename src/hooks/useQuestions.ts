@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { GameMode } from "../types/GameMode";
 import {
   collection,
   onSnapshot,
@@ -9,7 +10,7 @@ import {
 import { db } from "../services/firebase";
 import type { Question } from "../types/Question";
 
-export function useQuestions(mode: string) {
+export function useQuestions(mode: GameMode) {
   const [truths, setTruths] = useState<Question[]>([]);
   const [dares, setDares] = useState<Question[]>([]);
   const [penalties, setPenalties] = useState<Question[]>([]);

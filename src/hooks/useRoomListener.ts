@@ -3,7 +3,7 @@ import {
   doc,
   onSnapshot,
 } from "firebase/firestore";
-
+import type { RoomMode } from "../types/Room";
 import { db } from "../services/firebase";
 
 type Props = {
@@ -14,8 +14,7 @@ type Props = {
   setCard: (card: string | null) => void;
   setPenalty: (penalty: string | null) => void;
   setHostId: (id: string | null) => void;
-  setMode: (mode: string) => void;
-
+ setMode: (mode: RoomMode)=>void;
   setScreen: (
     screen: "room" | "players" | "game" | "admin"
   ) => void;

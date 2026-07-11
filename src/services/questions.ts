@@ -5,11 +5,12 @@ import {
   doc,
 } from "firebase/firestore";
 
+import type { GameMode } from "../types/GameMode";
 import { db } from "./firebase";
 
 export async function addTruth(
   text: string,
-  mode: string
+  mode: GameMode
 ) {
   await addDoc(collection(db, "truths"), {
     text,

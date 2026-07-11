@@ -1,4 +1,3 @@
-import type { Player } from "./Player";
 
 export type RoomData = {
   hostId: string | null;
@@ -9,4 +8,22 @@ export type RoomData = {
   started: boolean;
   createdAt: number;
   mode: string;
+};
+
+export type RoomMode =
+  | "classic"
+  | "choose"
+  | "party";
+
+
+export type Player = {
+  id: string;
+  name: string;
+};
+
+
+export type Room = {
+  id: string;
+  mode: RoomMode;
+  players: Player[];
 };

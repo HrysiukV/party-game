@@ -1,9 +1,10 @@
 import { useState } from "react";
+import type { RoomMode } from "../types/Room";
 
 type Item = {
   id: string;
   text: string;
-  mode: string;
+  mode: RoomMode;
 };
 
 type Props = {
@@ -11,22 +12,22 @@ type Props = {
   dares: Item[];
   penalties: Item[];
 
-  mode: string;
+  mode: RoomMode;
 
   addTruth: (
-    text: string,
-    mode: string
-  ) => void;
+ text:string,
+ mode:RoomMode
+)=>void;
 
-  addDare: (
-    text: string,
-    mode: string
-  ) => void;
+addDare: (
+ text:string,
+ mode:RoomMode
+)=>void;
 
-  addPenalty: (
-    text: string,
-    mode: string
-  ) => void;
+addPenalty: (
+ text:string,
+ mode:RoomMode
+)=>void;
 
   deleteTruth: (id: string) => void;
   deleteDare: (id: string) => void;

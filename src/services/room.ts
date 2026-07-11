@@ -1,4 +1,6 @@
 import { db } from "./firebase";
+import type { GameMode } from "../types/GameMode";
+
 import {
   doc,
   setDoc,
@@ -34,7 +36,7 @@ const avatars = [
 export async function createRoom(
   roomCode: string,
   hostId: string,
-  mode: string
+  mode: GameMode
 ) {
   await setDoc(doc(db, "rooms", roomCode), {
     hostId,

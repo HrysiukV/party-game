@@ -1,3 +1,5 @@
+import { gameModes } from "../data/gameModes";
+
 type Props = {
   roomInput: string;
   setRoomInput: (value: string) => void;
@@ -10,6 +12,10 @@ type Props = {
 
   isAdmin: boolean;
   openAdmin: () => void;
+
+  selectedMode: string;
+
+setSelectedMode: (mode: string) => void;
 };
 
 function Room({
@@ -21,12 +27,65 @@ function Room({
   setShowJoin,
   isAdmin,
   openAdmin,
+  selectedMode,
+setSelectedMode,
 }: Props) {
   return (
     <div className="app">
       <h1>🏠 AFTER</h1>
 
       <p>Створіть або приєднайтесь до кімнати</p>
+<div
+  style={{
+    width: "100%",
+    maxWidth: 420,
+    margin: "25px 0",
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
+  }}
+>
+  {gameModes.map((mode) => (
+    <div
+      key={mode.id}
+      onClick={() => setSelectedMode(mode.id)}
+      style={{
+        cursor: "pointer",
+        padding: "16px",
+        borderRadius: 18,
+        border:
+          selectedMode === mode.id
+            ? "2px solid #7c3aed"
+            : "1px solid rgba(255,255,255,.08)",
+        background:
+          selectedMode === mode.id
+            ? "rgba(124,58,237,.18)"
+            : "rgba(255,255,255,.05)",
+
+        transition: ".2s",
+      }}
+    >
+      <div
+        style={{
+          fontWeight: 700,
+          fontSize: 18,
+        }}
+      >
+        {mode.emoji} {mode.title}
+      </div>
+
+      <div
+        style={{
+          marginTop: 5,
+          opacity: .7,
+          fontSize: 14,
+        }}
+      >
+        {mode.description}
+      </div>
+    </div>
+  ))}
+</div>
 
       <button onClick={createRoom}>
         ➕ Створити кімнату

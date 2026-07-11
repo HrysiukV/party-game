@@ -72,6 +72,10 @@ function App() {
 } = useRoom();
 
 const [showJoin, setShowJoin] = useState(false);
+
+const [selectedMode, setSelectedMode] =
+  useState("classic");
+
 const [name, setName] = useState("");
 
 type Question = {
@@ -317,9 +321,12 @@ async function leaveRoom() {
   showJoin={showJoin}
   setShowJoin={setShowJoin}
   isAdmin={isAdmin}
-openAdmin={() => {
+  selectedMode={selectedMode}
+  setSelectedMode={setSelectedMode}
+  openAdmin={() => {
   console.log("CLICK ADMIN");
   setScreen("admin");
+  
 }}
 />
     );

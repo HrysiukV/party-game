@@ -379,7 +379,7 @@ if (screen === "admin") {
   setScreen={setScreen}
   leaveRoom={leaveRoom}
   room={room}
-
+ playersCount={players.length}
 />
     );
   }

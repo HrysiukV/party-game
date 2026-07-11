@@ -1,4 +1,5 @@
 import RoomBadge from "../components/RoomBadge";
+import PlayersBadge from "../components/PlayersBadge";
 
 type Player = {
   id: string;
@@ -33,6 +34,7 @@ function Players({
     <div className="app">
      
       <RoomBadge room={room} />
+      <PlayersBadge count={players.length} />
 
       <h1>👥 Гравці</h1>
 

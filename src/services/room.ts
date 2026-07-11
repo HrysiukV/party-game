@@ -8,6 +8,29 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 
+const avatars = [
+  "😎",
+  "🤠",
+  "🦊",
+  "🐼",
+  "🐸",
+  "👻",
+  "🤖",
+  "🐯",
+  "🦁",
+  "🐨",
+  "🐵",
+  "🐙",
+  "🦄",
+  "🐧",
+  "🐺",
+  "🐱",
+  "🐻",
+  "🦥",
+  "🐲",
+  "🦉",
+];
+
 export async function createRoom(userId: string) {
   const code = Math.random()
     .toString(36)
@@ -39,7 +62,11 @@ export async function addPlayer(
   await updateDoc(doc(db, "rooms", room), {
     players: arrayUnion({
       id: userId,
-      name,
+      name: name.trim(),
+      avatar:
+        avatars[
+          Math.floor(Math.random() * avatars.length)
+        ],
     }),
   });
 }

@@ -71,12 +71,6 @@ function App() {
   setPenalty,
 } = useRoom();
 
-  // GAME STATE (SYNC FIREBASE)
-  //type Player = {
-  //id: string;
-  //name: string;
-//};
-
 const [showJoin, setShowJoin] = useState(false);
 const [name, setName] = useState("");
 
@@ -346,6 +340,7 @@ return (
   startGame={startGame}
   goBack={goBack}
   isHost={hostId === userId}
+  hostId={hostId}
 />
     );
 

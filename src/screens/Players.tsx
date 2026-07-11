@@ -3,6 +3,7 @@ import RoomBadge from "../components/RoomBadge";
 type Player = {
   id: string;
   name: string;
+  avatar?: string;
 };
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
   startGame: () => void;
   goBack: () => void;
   isHost: boolean;
+  hostId: string | null;
 };
 
 function Players({
@@ -25,6 +27,7 @@ function Players({
   startGame,
   goBack,
   isHost,
+   hostId,
 }: Props) {
   return (
     <div className="app">
@@ -32,12 +35,6 @@ function Players({
       <RoomBadge room={room} />
 
       <h1>👥 Гравці</h1>
-
-      {room && (
-        <p>
-          Код кімнати: <b>{room}</b>
-        </p>
-      )}
 
       <input
         value={name}
@@ -50,50 +47,56 @@ function Players({
       </button>
 
       <div
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          marginTop: 25,
-          display: "flex",
-          flexDirection: "column",
-          gap: 10,
-        }}
-      >
-        {players.map((player) => (
-          <div
-            key={player.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "12px 16px",
-              borderRadius: 14,
-              background: "#1c1c26",
-            }}
-          >
-            <div
-              style={{
-                width: 12,
-                height: 12,
-                borderRadius: "50%",
-                background: "#22c55e",
-              }}
-            />
+  style={{
+    width: "100%",
+    maxWidth: 430,
+    marginTop: 25,
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
+  }}
+>
+  {players.map((player) => (
+  <div
+    key={player.id}
+    className="player-card"
+  >
+    <div className="player-avatar">
+    {player.avatar ?? "😎"}
+    </div>
 
-            <span style={{ flex: 1 }}>
-              {player.name}
-            </span>
-          </div>
-        ))}
-      </div>
+    <div className="player-info">
+      <span className="player-name">
+        {player.name}
+      </span>
+
+      <span className="player-status">
+        🟢 Онлайн
+      </span>
+    </div>
+
+    {player.id === hostId && (
+      <span
+        className="host-icon"
+        title="Хост"
+      >
+        👑
+      </span>
+    )}
+  </div>
+))}
+</div>
 
       {isHost ? (
         <button
-          style={{ marginTop: 25 }}
-          onClick={startGame}
-        >
-          🎮 Почати гру
-        </button>
+  disabled={players.length < 2}
+  style={{
+    marginTop: 25,
+  }}
+  onClick={startGame}
+>
+  🎮 Почати гру
+</button>
       ) : (
         <p
           style={{

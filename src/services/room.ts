@@ -38,13 +38,13 @@ export async function createRoom(
 ) {
   await setDoc(doc(db, "rooms", roomCode), {
     hostId,
+    mode,
     players: [],
     currentPlayerId: null,
     card: null,
     penalty: null,
     started: false,
     createdAt: Date.now(),
-    mode,
   });
 }
 

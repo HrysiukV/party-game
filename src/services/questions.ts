@@ -7,21 +7,33 @@ import {
 
 import { db } from "./firebase";
 
-export async function addTruth(text: string) {
+export async function addTruth(
+  text: string,
+  mode: string
+) {
   await addDoc(collection(db, "truths"), {
     text,
+    mode,
   });
 }
 
-export async function addDare(text: string) {
+export async function addDare(
+  text: string,
+  mode: string
+) {
   await addDoc(collection(db, "dares"), {
     text,
+    mode,
   });
 }
 
-export async function addPenalty(text: string) {
+export async function addPenalty(
+  text: string,
+  mode: string
+) {
   await addDoc(collection(db, "penalties"), {
     text,
+    mode,
   });
 }
 
@@ -40,27 +52,33 @@ export async function deletePenalty(id: string) {
 import { updateDoc } from "firebase/firestore";
 export async function updateTruth(
   id: string,
-  text: string
+  text: string,
+  mode: string
 ) {
   await updateDoc(doc(db, "truths", id), {
     text,
+    mode,
   });
 }
 
 export async function updateDare(
   id: string,
-  text: string
+  text: string,
+  mode: string
 ) {
   await updateDoc(doc(db, "dares", id), {
     text,
+    mode,
   });
 }
 
 export async function updatePenalty(
   id: string,
-  text: string
+  text: string,
+  mode: string
 ) {
   await updateDoc(doc(db, "penalties", id), {
     text,
+    mode,
   });
 }

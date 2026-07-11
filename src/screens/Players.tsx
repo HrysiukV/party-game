@@ -17,6 +17,7 @@ type Props = {
   goBack: () => void;
   isHost: boolean;
   hostId: string | null;
+  mode: string;
 };
 
 function Players({

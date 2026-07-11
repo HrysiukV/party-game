@@ -47,13 +47,14 @@ const isAdmin = userId === "846617693";
 function App() {
   // UI
  const [screen, setScreen] = useState<  "room" | "players" | "game" | "admin">("room");
-const { truths, dares, penalties } = useQuestions();
-  // ROOM
+ // ROOM
   const {
   room,
   setRoom,
   roomInput,
   setRoomInput,
+  mode,
+  setMode,
 
   players,
   setPlayers,
@@ -70,6 +71,12 @@ const { truths, dares, penalties } = useQuestions();
   penalty,
   setPenalty,
 } = useRoom();
+
+const {
+  truths,
+  dares,
+  penalties
+} = useQuestions(mode);
 
 const [showJoin, setShowJoin] = useState(false);
 
@@ -102,6 +109,7 @@ useEffect(() => {
       setCard(data.card || null);
       setPenalty(data.penalty || null);
       setHostId(data.hostId || null);
+      setMode(data.mode || "classic");
       setStarted(data.started || false);
       if (data.started && data.players?.some(
   (p:any)=>p.id===userId
@@ -305,6 +313,7 @@ return (
   goBack={goBack}
   isHost={hostId === userId}
   hostId={hostId}
+  mode={mode}
 />
     );
 
@@ -324,6 +333,7 @@ if (screen === "admin") {
   deleteDare={deleteDare}
   deletePenalty={deletePenalty}
   goBack={() => setScreen("room")}
+  mode={mode}
 />
   );
 }

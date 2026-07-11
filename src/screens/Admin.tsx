@@ -3,6 +3,7 @@ import { useState } from "react";
 type Item = {
   id: string;
   text: string;
+  mode: string;
 };
 
 type Props = {
@@ -10,9 +11,22 @@ type Props = {
   dares: Item[];
   penalties: Item[];
 
-  addTruth: (text: string) => void;
-  addDare: (text: string) => void;
-  addPenalty: (text: string) => void;
+  mode: string;
+
+  addTruth: (
+    text: string,
+    mode: string
+  ) => void;
+
+  addDare: (
+    text: string,
+    mode: string
+  ) => void;
+
+  addPenalty: (
+    text: string,
+    mode: string
+  ) => void;
 
   deleteTruth: (id: string) => void;
   deleteDare: (id: string) => void;
@@ -25,6 +39,7 @@ function Admin({
   truths,
   dares,
   penalties,
+  mode,
   addTruth,
   addDare,
   addPenalty,
@@ -141,13 +156,13 @@ const [view, setView] = useState<
           if (!text.trim()) return;
 
           if (type === "truth")
-            addTruth(text.trim());
+  addTruth(text.trim(), mode);
 
-          if (type === "dare")
-            addDare(text.trim());
+if (type === "dare")
+  addDare(text.trim(), mode);
 
-          if (type === "penalty")
-            addPenalty(text.trim());
+if (type === "penalty")
+  addPenalty(text.trim(), mode);
 
           setText("");
         }}

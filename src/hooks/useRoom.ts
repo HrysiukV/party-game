@@ -19,6 +19,9 @@ export function useRoom() {
   const [penalty, setPenalty] =
     useState<string | null>(null);
 
+  const [mode, setMode] = useState("classic");
+
+  
   return {
     room,
     setRoom,
@@ -40,5 +43,8 @@ export function useRoom() {
 
     penalty,
     setPenalty,
+
+    mode,
+    setMode,
   };
 }

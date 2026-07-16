@@ -445,7 +445,7 @@ console.log({
 
 
         room={room}
-
+players={players}
 
         playersCount={
           players.length

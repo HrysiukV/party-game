@@ -4,6 +4,12 @@ import PlayersBadge from "../components/PlayersBadge";
 
 type Screen = "room" | "players" | "game" | "admin";
 
+type Player = {
+  id: string;
+  name: string;
+  avatar?: string;
+};
+
 type Props = {
   currentPlayer: string | null;
   card: string | null;
@@ -18,7 +24,9 @@ type Props = {
   leaveRoom: () => void;
   room: string | null;
   playersCount: number;
-    mode: string;
+players: Player[];
+mode: string;
+
 };
 
 function Game({
@@ -32,8 +40,9 @@ function Game({
   setCard,
   setPenalty,
   leaveRoom,
-  room,
-  playersCount,
+ room,
+playersCount,
+players,
 }: Props) {
   const [showCard, setShowCard] = useState(false);
 
@@ -49,6 +58,10 @@ function Game({
     }
   }, [card, penalty]);
 
+  const current = players.find(
+  (p) => p.name === currentPlayer
+);
+
   return (
   <div className="app">
   <div className="top-bar">
@@ -63,7 +76,34 @@ function Game({
     </button>
   </div>
 
-      <h1>🎮 Хід: {currentPlayer}</h1>
+   <h2
+  style={{
+    fontSize: 24,
+    marginTop: 14,
+    marginBottom: 6,
+    fontWeight: 700,
+  }}
+>
+  🎮 Хід
+</h2>
+
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    fontSize: 20,
+    fontWeight: 600,
+    marginBottom: 18,
+  }}
+>
+  <span style={{ fontSize: 26 }}>
+    {current?.avatar ?? "😎"}
+  </span>
+
+  <span>{currentPlayer}</span>
+</div>
 
       {!isMyTurn && (
         <p

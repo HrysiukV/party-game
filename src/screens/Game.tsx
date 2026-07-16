@@ -82,6 +82,11 @@ players,
     marginTop: 14,
     marginBottom: 6,
     fontWeight: 700,
+
+    color: "#a855f7",
+    textShadow:
+      "0 0 8px rgba(168,85,247,.8), 0 0 20px rgba(124,58,237,.45)",
+    letterSpacing: 1,
   }}
 >
   🎮 Хід
@@ -94,15 +99,19 @@ players,
     justifyContent: "center",
     gap: 8,
     fontSize: 20,
-    fontWeight: 600,
+    fontWeight: 700,
     marginBottom: 18,
+
+    color: "#f5f3ff",
+    textShadow:
+      "0 0 6px rgba(168,85,247,.7), 0 0 14px rgba(124,58,237,.4)",
   }}
 >
   <span style={{ fontSize: 26 }}>
     {current?.avatar ?? "😎"}
   </span>
 
-  <span>{currentPlayer}</span>
+  <span>{current?.name ?? "..."}</span>
 </div>
 
       {!isMyTurn && (

@@ -143,26 +143,26 @@ const [chooseType, setChooseType] = useState<
     }}
   >
     {!isMyTurn && (
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          borderRadius: 18,
-          background: "rgba(15,15,30,.55)",
-          backdropFilter: "blur(3px)",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          zIndex: 10,
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: 20,
-          textShadow: "0 0 12px rgba(124,58,237,.9)",
-        }}
-      >
-        🔒 Очікуйте свій хід
-      </div>
-    )}
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      borderRadius: 18,
+      background: "rgba(15,15,30,.55)",
+      backdropFilter: "blur(3px)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 10,
+      color: "#fff",
+      fontWeight: 700,
+      fontSize: 20,
+      textShadow: "0 0 12px rgba(124,58,237,.9)",
+    }}
+  >
+    🔒 Очікуйте свій хід
+  </div>
+)}
 
     <div
       onClick={() => {
@@ -177,7 +177,9 @@ const [chooseType, setChooseType] = useState<
         background: "rgba(124,58,237,.18)",
         border: "2px solid #7c3aed",
         textAlign: "center",
-        opacity: isMyTurn ? 1 : 0.45,
+        opacity: isMyTurn ? 1 : 0.65,
+filter: isMyTurn ? "none" : "grayscale(.35)",
+pointerEvents: isMyTurn ? "auto" : "none",
         transition: ".25s",
 
         display: "flex",
@@ -222,7 +224,9 @@ const [chooseType, setChooseType] = useState<
         background: "rgba(124,58,237,.18)",
         border: "2px solid #7c3aed",
         textAlign: "center",
-        opacity: isMyTurn ? 1 : 0.45,
+        opacity: isMyTurn ? 1 : 0.65,
+filter: isMyTurn ? "none" : "grayscale(.35)",
+pointerEvents: isMyTurn ? "auto" : "none",
         transition: ".25s",
 
         display: "flex",
@@ -257,11 +261,16 @@ const [chooseType, setChooseType] = useState<
 )}
 
       {card && (
-        <div
-          className={`card ${
-            showCard ? "card-show" : "card-hide"
-          }`}
-        >
+  <div
+    className={`card ${
+      showCard ? "card-show" : "card-hide"
+    }`}
+    style={{
+      opacity: isMyTurn ? 1 : 0.8,
+      filter: isMyTurn ? "none" : "grayscale(.2)",
+      transition: ".2s",
+    }}
+  >
           <h2
             style={{
               whiteSpace: "pre-line",
@@ -279,32 +288,47 @@ const [chooseType, setChooseType] = useState<
             }}
           >
             <button
-              disabled={!isMyTurn}
-              onClick={() => {
-                setPenalty(null);
-                setChooseType(null);
-                nextTurn();
-              }}
-            >
-              Виконано ✅
-            </button>
+  disabled={!isMyTurn}
+  style={{
+    opacity: isMyTurn ? 1 : 0.55,
+    filter: isMyTurn ? "none" : "grayscale(.35)",
+    transition: ".2s",
+  }}
+  onClick={() => {
+    setPenalty(null);
+    setChooseType(null);
+    nextTurn();
+  }}
+>
+  Виконано ✅
+</button>
 
-            <button
-              disabled={!isMyTurn}
-              onClick={refuse}
-            >
-              Відмовляюсь ❌
-            </button>
+<button
+  disabled={!isMyTurn}
+  style={{
+    opacity: isMyTurn ? 1 : 0.55,
+    filter: isMyTurn ? "none" : "grayscale(.35)",
+    transition: ".2s",
+  }}
+  onClick={refuse}
+>
+  Відмовляюсь ❌
+</button>
           </div>
         </div>
       )}
 
       {penalty && (
-        <div
-          className={`card ${
-            showCard ? "card-show" : "card-hide"
-          }`}
-        >
+  <div
+    className={`card ${
+      showCard ? "card-show" : "card-hide"
+    }`}
+    style={{
+      opacity: isMyTurn ? 1 : 0.8,
+      filter: isMyTurn ? "none" : "grayscale(.2)",
+      transition: ".2s",
+    }}
+  >
           <h2
             style={{
               whiteSpace: "pre-line",
@@ -314,7 +338,11 @@ const [chooseType, setChooseType] = useState<
           </h2>
 
           <button
-            style={{ marginTop: 20 }}
+            style={{
+  marginTop: 20,
+  opacity: isMyTurn ? 1 : 0.55,
+  filter: isMyTurn ? "none" : "grayscale(.35)",
+}}
             disabled={!isMyTurn}
             onClick={() => {
               setCard(null);

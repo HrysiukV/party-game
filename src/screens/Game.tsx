@@ -82,15 +82,16 @@ const [chooseType, setChooseType] = useState<
 
    <h2
   style={{
-    fontSize: 24,
+    fontSize: 30,
     marginTop: 14,
-    marginBottom: 6,
+    marginBottom: 8,
     fontWeight: 700,
 
-    color: "#a855f7",
+    color: "#ffffff",
+
     textShadow:
-      "0 0 8px rgba(168,85,247,.8), 0 0 20px rgba(124,58,237,.45)",
-    letterSpacing: 1,
+      "0 0 8px rgba(168,85,247,.8), 0 0 20px rgba(124,58,237,.5)",
+      letterSpacing: 1,
   }}
 >
   🎮 Хід
@@ -131,15 +132,15 @@ const [chooseType, setChooseType] = useState<
 
       {!card && !penalty && mode === "choose" && !chooseType && (
   <div
-    style={{
-      width: "100%",
-      maxWidth: 420,
-      display: "flex",
-      flexDirection: "column",
-      gap: 14,
-      marginTop: 10,
-    }}
-  >
+  style={{
+    width: "100%",
+    maxWidth: 420,
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 14,
+    marginTop: 10,
+  }}
+>
     <div
       onClick={() => {
         if (!isMyTurn) return;
@@ -147,20 +148,25 @@ const [chooseType, setChooseType] = useState<
         drawCard("truth");
       }}
       style={{
-        cursor: isMyTurn ? "pointer" : "default",
-        padding: 18,
-        borderRadius: 18,
-        background: "rgba(124,58,237,.18)",
-        border: "2px solid #7c3aed",
-        textAlign: "center",
-        opacity: isMyTurn ? 1 : .5,
-      }}
+  cursor: isMyTurn ? "pointer" : "default",
+  padding: "16px 12px",
+  borderRadius: 18,
+  background: "rgba(124,58,237,.18)",
+  border: "2px solid #7c3aed",
+  textAlign: "center",
+  opacity: isMyTurn ? 1 : 0.5,
+
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  minHeight: 170,
+}}
     >
-      <div style={{ fontSize: 40 }}>🧠</div>
+      <div style={{ fontSize: 34 }}>🧠</div>
 
       <div
         style={{
-          fontSize: 22,
+          fontSize: 20,
           fontWeight: 700,
           marginTop: 8,
         }}
@@ -170,8 +176,9 @@ const [chooseType, setChooseType] = useState<
 
       <div
         style={{
-          opacity: .7,
-          marginTop: 4,
+          opacity: 0.7,
+marginTop: 4,
+fontSize: 13,
         }}
       >
         Відповісти чесно
@@ -194,11 +201,11 @@ const [chooseType, setChooseType] = useState<
         opacity: isMyTurn ? 1 : .5,
       }}
     >
-      <div style={{ fontSize: 40 }}>🔥</div>
+      <div style={{ fontSize: 34 }}>🔥</div>
 
       <div
         style={{
-          fontSize: 22,
+          fontSize: 20,
           fontWeight: 700,
           marginTop: 8,
         }}
@@ -208,8 +215,9 @@ const [chooseType, setChooseType] = useState<
 
       <div
         style={{
-          opacity: .7,
-          marginTop: 4,
+          opacity: 0.7,
+marginTop: 4,
+fontSize: 13,
         }}
       >
         Виконати завдання

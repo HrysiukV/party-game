@@ -55,7 +55,7 @@ function Room({
   onClick={() => setSelectedMode(mode.id)}
   style={{
   cursor: "pointer",
-  padding: "14px 18px",
+  padding: "10px 18px",
   borderRadius: 16,
   border: active
   ? "2px solid #7c3aed"
@@ -65,7 +65,7 @@ background: active
   ? "rgba(124,58,237,.18)"
   : "rgba(255,255,255,.05)",
   transition: ".2s",
-  minHeight: 72,
+  minHeight: 58,
 
   display: "flex",
   flexDirection: "column",
@@ -77,7 +77,7 @@ background: active
   <div
   style={{
     fontWeight: 700,
-    fontSize: 17,
+    fontSize: 16,
     lineHeight: 1.2,
   }}
 >
@@ -85,10 +85,10 @@ background: active
 </div>
 <div
   style={{
-    marginTop: 4,
+    marginTop: 2,
     opacity: 0.7,
-    fontSize: 13,
-    lineHeight: 1.3,
+    fontSize: 12,
+    lineHeight: 1.2,
   }}
 >
   {mode.description}

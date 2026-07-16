@@ -14,7 +14,7 @@ type Props = {
   currentPlayer: string | null;
   card: string | null;
   penalty: string | null;
-  drawCard: () => void;
+  drawCard: (type?: "truth" | "dare") => void;
   refuse: () => void;
   nextTurn: () => void;
   setCard: React.Dispatch<React.SetStateAction<string | null>>;
@@ -43,8 +43,12 @@ function Game({
  room,
 playersCount,
 players,
+mode,
 }: Props) {
   const [showCard, setShowCard] = useState(false);
+const [chooseType, setChooseType] = useState<
+  "truth" | "dare" | null
+>(null);
 
   useEffect(() => {
     if (card || penalty) {
@@ -125,14 +129,103 @@ players,
         </p>
       )}
 
-      {!card && !penalty && (
-        <button
-          onClick={drawCard}
-          disabled={!isMyTurn}
-        >
-          Витягнути карту 🎲
-        </button>
-      )}
+      {!card && !penalty && mode === "choose" && !chooseType && (
+  <div
+    style={{
+      width: "100%",
+      maxWidth: 420,
+      display: "flex",
+      flexDirection: "column",
+      gap: 14,
+      marginTop: 10,
+    }}
+  >
+    <div
+      onClick={() => {
+        if (!isMyTurn) return;
+        setChooseType("truth");
+        drawCard("truth");
+      }}
+      style={{
+        cursor: isMyTurn ? "pointer" : "default",
+        padding: 18,
+        borderRadius: 18,
+        background: "rgba(124,58,237,.18)",
+        border: "2px solid #7c3aed",
+        textAlign: "center",
+        opacity: isMyTurn ? 1 : .5,
+      }}
+    >
+      <div style={{ fontSize: 40 }}>🧠</div>
+
+      <div
+        style={{
+          fontSize: 22,
+          fontWeight: 700,
+          marginTop: 8,
+        }}
+      >
+        Правда
+      </div>
+
+      <div
+        style={{
+          opacity: .7,
+          marginTop: 4,
+        }}
+      >
+        Відповісти чесно
+      </div>
+    </div>
+
+    <div
+      onClick={() => {
+        if (!isMyTurn) return;
+        setChooseType("dare");
+        drawCard("dare");
+      }}
+      style={{
+        cursor: isMyTurn ? "pointer" : "default",
+        padding: 18,
+        borderRadius: 18,
+        background: "rgba(124,58,237,.18)",
+        border: "2px solid #7c3aed",
+        textAlign: "center",
+        opacity: isMyTurn ? 1 : .5,
+      }}
+    >
+      <div style={{ fontSize: 40 }}>🔥</div>
+
+      <div
+        style={{
+          fontSize: 22,
+          fontWeight: 700,
+          marginTop: 8,
+        }}
+      >
+        Дія
+      </div>
+
+      <div
+        style={{
+          opacity: .7,
+          marginTop: 4,
+        }}
+      >
+        Виконати завдання
+      </div>
+    </div>
+  </div>
+)}
+
+{!card && !penalty && mode !== "choose" && (
+  <button
+    onClick={() => drawCard()}
+    disabled={!isMyTurn}
+  >
+    Витягнути карту 🎲
+  </button>
+)}
 
       {card && (
         <div
@@ -160,6 +253,7 @@ players,
               disabled={!isMyTurn}
               onClick={() => {
                 setPenalty(null);
+                setChooseType(null);
                 nextTurn();
               }}
             >
@@ -195,6 +289,7 @@ players,
             disabled={!isMyTurn}
             onClick={() => {
               setCard(null);
+              setChooseType(null);
               nextTurn();
             }}
           >

@@ -40,10 +40,10 @@ function Room({
         style={{
           width: "100%",
           maxWidth: 420,
-          margin: "25px 0",
+          margin: "20px 0",
           display: "flex",
           flexDirection: "column",
-          gap: 12,
+          gap: 8,
         }}
       >
         {gameModes.map((mode) => (
@@ -52,8 +52,8 @@ function Room({
             onClick={() => setSelectedMode(mode.id)}
             style={{
               cursor: "pointer",
-              padding: "16px",
-              borderRadius: 18,
+              padding: "12px 16px",
+              borderRadius: 14,
               border:
                 selectedMode === mode.id
                   ? "2px solid #7c3aed"
@@ -68,17 +68,23 @@ function Room({
             <div
               style={{
                 fontWeight: 700,
-                fontSize: 18,
+                fontSize: 16,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
               }}
             >
-              {mode.emoji} {mode.title}
+              <span style={{ fontSize: 20 }}>{mode.emoji}</span>
+              {mode.title}
             </div>
 
             <div
               style={{
-                marginTop: 5,
+                marginTop: 4,
                 opacity: 0.7,
-                fontSize: 14,
+                fontSize: 13,
+                lineHeight: 1.3,
+                marginLeft: 28,
               }}
             >
               {mode.description}
@@ -113,7 +119,7 @@ function Room({
         <button
           onClick={openAdmin}
           style={{
-            marginTop: 30,
+            marginTop: 24,
             background: "#7c3aed",
           }}
         >

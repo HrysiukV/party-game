@@ -34,8 +34,17 @@ function Players({
   return (
     <div className="app">
      
-      <RoomBadge room={room} />
-      <PlayersBadge count={players.length} />
+   <div className="top-bar">
+  <RoomBadge room={room} />
+  <PlayersBadge count={players.length} />
+
+  <button
+    className="top-badge exit-button"
+    onClick={goBack}
+  >
+    🚪
+  </button>
+</div>
 
       <h1>👥 Гравці</h1>
 
@@ -110,16 +119,6 @@ function Players({
           ⏳ Очікуємо, поки хост почне гру...
         </p>
       )}
-
-      <button
-        onClick={goBack}
-        style={{
-          marginTop: 20,
-          background: "#2a2a3a",
-        }}
-      >
-        ⬅ Назад
-      </button>
     </div>
   );
 }

@@ -260,6 +260,21 @@ pointerEvents: isMyTurn ? "auto" : "none",
   </div>
 )}
 
+{!card && !penalty && mode !== "choose" && (
+  <button
+    onClick={() => drawCard()}
+    disabled={!isMyTurn}
+    style={{
+      opacity: isMyTurn ? 1 : 0.6,
+      filter: isMyTurn ? "none" : "grayscale(.35)",
+      transition: ".2s",
+    }}
+  >
+    🎲 Відкрити картку
+  </button>
+)}
+
+
       {card && (
   <div
     className={`card ${

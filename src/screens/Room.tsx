@@ -54,49 +54,45 @@ function Room({
   key={mode.id}
   onClick={() => setSelectedMode(mode.id)}
   style={{
-    cursor: "pointer",
-    padding: "14px 18px",
-    borderRadius: 16,
-   border: active
+  cursor: "pointer",
+  padding: "14px 18px",
+  borderRadius: 16,
+  border: active
   ? "2px solid #7c3aed"
   : "1px solid rgba(255,255,255,.08)",
 
 background: active
   ? "rgba(124,58,237,.18)"
   : "rgba(255,255,255,.05)",
-    transition: ".2s",
-    minHeight: 72,
+  transition: ".2s",
+  minHeight: 72,
 
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start", // <-- головне
-  }}
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",   // ← центрує по горизонталі
+  textAlign: "center",    // ← центрує текст
+}}
 >
   <div
-    style={{
-      width: "100%",
-      fontWeight: 700,
-      fontSize: 17,
-      lineHeight: 1.2,
-      textAlign: "left", // <-- головне
-    }}
-  >
-    {mode.emoji} {mode.title}
-  </div>
-
-  <div
-    style={{
-      width: "100%",
-      marginTop: 4,
-      opacity: 0.7,
-      fontSize: 13,
-      lineHeight: 1.3,
-      textAlign: "left", // <-- головне
-    }}
-  >
-    {mode.description}
-  </div>
+  style={{
+    fontWeight: 700,
+    fontSize: 17,
+    lineHeight: 1.2,
+  }}
+>
+  {mode.emoji} {mode.title}
+</div>
+<div
+  style={{
+    marginTop: 4,
+    opacity: 0.7,
+    fontSize: 13,
+    lineHeight: 1.3,
+  }}
+>
+  {mode.description}
+</div>
 </div>
           );
         })}

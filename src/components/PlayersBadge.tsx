@@ -4,7 +4,7 @@ type Props = {
 
 function PlayersBadge({ count }: Props) {
   return (
-    <div className="top-badge players-badge">
+    <div className="top-badge">
       👥 {count}
     </div>
   );

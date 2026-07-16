@@ -222,65 +222,76 @@ background:#111;
 }
 
 
-.game-top-right {
+.top-bar {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  z-index: 1000;
 }
 
 .top-badge {
-  position: fixed;
-  top: 20px;
-
-  width: 130px;
-  height: 38px;
-
   display: flex;
   justify-content: center;
   align-items: center;
 
-  border-radius: 20px;
+  min-width: 72px;
+  height: 34px;
 
-  background: rgba(255,255,255,0.08);
+  padding: 0 12px;
 
-  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
 
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
   backdrop-filter: blur(12px);
 
-  color: #aaa;
+  color: #ddd;
+  font-size: 13px;
+  font-weight: 600;
 
-  font-size: 14px;
+  white-space: nowrap;
 
-  letter-spacing: 1px;
-
-  box-shadow:
-    0 8px 30px rgba(0,0,0,.35);
-
-  animation: fadeIn .3s ease;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
 
   transition: .25s;
 }
 
-
-.room-badge {
-  left: 20px;
-}
-
-
 .exit-button {
-  right: 20px;
-
+  min-width: 40px;
   cursor: pointer;
 }
 
-
 .exit-button:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,.15);
   transform: scale(1.05);
 }
 
 .next-button {
   margin-top: 25px;
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    gap: 6px;
+    top: 12px;
+  }
+
+  .top-badge {
+    min-width: 60px;
+    height: 30px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+
+  .exit-button {
+    min-width: 34px;
+  }
 }
 
 .player-card{

@@ -50,9 +50,18 @@ function Game({
   }, [card, penalty]);
 
   return (
-    <div className="app">
+  <div className="app">
+  <div className="top-bar">
     <RoomBadge room={room} />
     <PlayersBadge count={playersCount} />
+
+    <button
+      className="top-badge exit-button"
+      onClick={leaveRoom}
+    >
+      🚪
+    </button>
+  </div>
 
       <h1>🎮 Хід: {currentPlayer}</h1>
 
@@ -154,15 +163,6 @@ function Game({
     Наступний гравець ➜
   </button>
 )}
-      <div className="game-top-right">
-        <button
-          className="top-badge exit-button"
-          onClick={leaveRoom}
-        >
-          🚪 Вийти
-        </button>
-      </div>
-
     </div>
   );
 }

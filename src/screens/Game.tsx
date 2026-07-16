@@ -370,11 +370,16 @@ pointerEvents: isMyTurn ? "auto" : "none",
         </div>
       )}
 
-      {!card && !penalty && mode !== "choose" && (
+      {!card && !penalty && (
   <button
     className="next-button"
     onClick={nextTurn}
     disabled={!isMyTurn}
+    style={{
+      opacity: isMyTurn ? 1 : 0.6,
+      filter: isMyTurn ? "none" : "grayscale(.35)",
+      transition: ".2s",
+    }}
   >
     Наступний гравець ➜
   </button>

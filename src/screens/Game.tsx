@@ -226,13 +226,130 @@ fontSize: 13,
   </div>
 )}
 
-{!card && !penalty && mode !== "choose" && (
-  <button
-    onClick={() => drawCard()}
-    disabled={!isMyTurn}
+{!card && !penalty && mode === "choose" && !chooseType && (
+  <div
+    style={{
+      width: "100%",
+      maxWidth: 420,
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 14,
+      marginTop: 10,
+      position: "relative",
+    }}
   >
-    Витягнути карту 🎲
-  </button>
+    {!isMyTurn && (
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 18,
+          background: "rgba(15,15,30,.55)",
+          backdropFilter: "blur(3px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 10,
+          color: "#fff",
+          fontWeight: 700,
+          fontSize: 20,
+          textShadow: "0 0 12px rgba(124,58,237,.9)",
+        }}
+      >
+        🔒 Очікуйте свій хід
+      </div>
+    )}
+
+    <div
+      onClick={() => {
+        if (!isMyTurn) return;
+        setChooseType("truth");
+        drawCard("truth");
+      }}
+      style={{
+        cursor: isMyTurn ? "pointer" : "default",
+        padding: "16px 12px",
+        borderRadius: 18,
+        background: "rgba(124,58,237,.18)",
+        border: "2px solid #7c3aed",
+        textAlign: "center",
+        opacity: isMyTurn ? 1 : 0.45,
+        transition: ".25s",
+
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: 170,
+      }}
+    >
+      <div style={{ fontSize: 34 }}>🧠</div>
+
+      <div
+        style={{
+          fontSize: 20,
+          fontWeight: 700,
+          marginTop: 8,
+        }}
+      >
+        Правда
+      </div>
+
+      <div
+        style={{
+          opacity: .7,
+          marginTop: 4,
+          fontSize: 13,
+        }}
+      >
+        Відповісти чесно
+      </div>
+    </div>
+
+    <div
+      onClick={() => {
+        if (!isMyTurn) return;
+        setChooseType("dare");
+        drawCard("dare");
+      }}
+      style={{
+        cursor: isMyTurn ? "pointer" : "default",
+        padding: "16px 12px",
+        borderRadius: 18,
+        background: "rgba(124,58,237,.18)",
+        border: "2px solid #7c3aed",
+        textAlign: "center",
+        opacity: isMyTurn ? 1 : 0.45,
+        transition: ".25s",
+
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: 170,
+      }}
+    >
+      <div style={{ fontSize: 34 }}>🔥</div>
+
+      <div
+        style={{
+          fontSize: 20,
+          fontWeight: 700,
+          marginTop: 8,
+        }}
+      >
+        Дія
+      </div>
+
+      <div
+        style={{
+          opacity: .7,
+          marginTop: 4,
+          fontSize: 13,
+        }}
+      >
+        Виконати завдання
+      </div>
+    </div>
+  </div>
 )}
 
       {card && (

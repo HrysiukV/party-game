@@ -3,38 +3,39 @@ import {
   collection,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 
-import type { GameMode } from "../types/GameMode";
 import { db } from "./firebase";
+import type { GameMode } from "../types/GameMode";
 
 export async function addTruth(
   text: string,
-  mode: GameMode
+  modes: GameMode[]
 ) {
   await addDoc(collection(db, "truths"), {
     text,
-    mode,
+    modes,
   });
 }
 
 export async function addDare(
   text: string,
-  mode: string
+  modes: GameMode[]
 ) {
   await addDoc(collection(db, "dares"), {
     text,
-    mode,
+    modes,
   });
 }
 
 export async function addPenalty(
   text: string,
-  mode: string
+  modes: GameMode[]
 ) {
   await addDoc(collection(db, "penalties"), {
     text,
-    mode,
+    modes,
   });
 }
 
@@ -50,36 +51,35 @@ export async function deletePenalty(id: string) {
   await deleteDoc(doc(db, "penalties", id));
 }
 
-import { updateDoc } from "firebase/firestore";
 export async function updateTruth(
   id: string,
   text: string,
-  mode: string
+  modes: GameMode[]
 ) {
   await updateDoc(doc(db, "truths", id), {
     text,
-    mode,
+    modes,
   });
 }
 
 export async function updateDare(
   id: string,
   text: string,
-  mode: string
+  modes: GameMode[]
 ) {
   await updateDoc(doc(db, "dares", id), {
     text,
-    mode,
+    modes,
   });
 }
 
 export async function updatePenalty(
   id: string,
   text: string,
-  mode: string
+  modes: GameMode[]
 ) {
   await updateDoc(doc(db, "penalties", id), {
     text,
-    mode,
+    modes,
   });
 }

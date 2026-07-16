@@ -1,7 +1,7 @@
-import type { RoomMode } from "./Room";
+import type { GameMode } from "./GameMode";
 
 export type Question = {
   id: string;
   text: string;
-  mode: RoomMode;
+  modes: GameMode[];
 };

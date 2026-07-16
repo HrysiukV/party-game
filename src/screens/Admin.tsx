@@ -1,37 +1,31 @@
 import { useState } from "react";
 import type { RoomMode } from "../types/Room";
-
-type Item = {
-  id: string;
-  text: string;
-  mode: RoomMode;
-};
+import type { GameMode } from "../types/GameMode";
+import type { Question } from "../types/Question";
 
 type Props = {
-  truths: Item[];
-  dares: Item[];
-  penalties: Item[];
-
-  mode: RoomMode;
+  truths: Question[];
+  dares: Question[];
+  penalties: Question[];
 
   addTruth: (
- text:string,
- mode:RoomMode
-)=>void;
+    text: string,
+    modes: GameMode[]
+  ) => Promise<void>;
 
-addDare: (
- text:string,
- mode:RoomMode
-)=>void;
+  addDare: (
+    text: string,
+    modes: GameMode[]
+  ) => Promise<void>;
 
-addPenalty: (
- text:string,
- mode:RoomMode
-)=>void;
+  addPenalty: (
+    text: string,
+    modes: GameMode[]
+  ) => Promise<void>;
 
-  deleteTruth: (id: string) => void;
-  deleteDare: (id: string) => void;
-  deletePenalty: (id: string) => void;
+  deleteTruth: (id: string) => Promise<void>;
+  deleteDare: (id: string) => Promise<void>;
+  deletePenalty: (id: string) => Promise<void>;
 
   goBack: () => void;
 };
@@ -40,7 +34,6 @@ function Admin({
   truths,
   dares,
   penalties,
-  mode,
   addTruth,
   addDare,
   addPenalty,
@@ -59,10 +52,13 @@ const [view, setView] = useState<
   const [type, setType] = useState<
     "truth" | "dare" | "penalty"
   >("truth");
+  const [selectedModes, setSelectedModes] = useState<RoomMode[]>([
+  "classic",
+]);
 
   function renderItem(
-  item: Item,
-  onDelete: (id: string) => void
+  item: Question,
+ onDelete: (id: string) => void
 ) {
   return (
     <div
@@ -144,6 +140,110 @@ const [view, setView] = useState<
         </option>
       </select>
 
+<h3>Режими</h3>
+
+<div
+  style={{
+    display: "grid",
+    gap: 12,
+    marginBottom: 20,
+  }}
+>
+  {[
+    {
+      id: "classic",
+      emoji: "🎲",
+      title: "Classic",
+      description: "Звичайна гра",
+    },
+    {
+      id: "choose",
+      emoji: "👉",
+      title: "Choose",
+      description: "Обери гравця",
+    },
+    {
+      id: "party",
+      emoji: "🥳",
+      title: "Party",
+      description: "Для великої компанії",
+    },
+  ].map((m) => {
+    const active = selectedModes.includes(
+      m.id as RoomMode
+    );
+
+    return (
+      <div
+        key={m.id}
+        onClick={() => {
+          if (active) {
+            setSelectedModes(
+              selectedModes.filter(
+                (x) => x !== m.id
+              )
+            );
+          } else {
+            setSelectedModes([
+              ...selectedModes,
+              m.id as RoomMode,
+            ]);
+          }
+        }}
+        style={{
+          cursor: "pointer",
+          padding: 16,
+          borderRadius: 18,
+          border: active
+            ? "2px solid #7c3aed"
+            : "1px solid rgba(255,255,255,.08)",
+          background: active
+            ? "rgba(124,58,237,.18)"
+            : "rgba(255,255,255,.05)",
+          transition: ".2s",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+              }}
+            >
+              {m.emoji} {m.title}
+            </div>
+
+            <div
+              style={{
+                marginTop: 4,
+                opacity: 0.7,
+                fontSize: 14,
+              }}
+            >
+              {m.description}
+            </div>
+          </div>
+
+          <div
+            style={{
+              fontSize: 24,
+            }}
+          >
+            {active ? "✅" : "⬜"}
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
       <input
         value={text}
         onChange={(e) =>
@@ -153,23 +253,31 @@ const [view, setView] = useState<
       />
 
       <button
-        onClick={() => {
-          if (!text.trim()) return;
+  onClick={async () => {
+    if (!text.trim()) return;
 
-          if (type === "truth")
-  addTruth(text.trim(), mode);
+if (!selectedModes.length) {
+  alert("Оберіть хоча б один режим");
+  return;
+}
 
-if (type === "dare")
-  addDare(text.trim(), mode);
+if (type === "truth") {
+  await addTruth(text.trim(), selectedModes);
+}
 
-if (type === "penalty")
-  addPenalty(text.trim(), mode);
+if (type === "dare") {
+  await addDare(text.trim(), selectedModes);
+}
 
-          setText("");
-        }}
-      >
-        ➕ Додати
-      </button>
+if (type === "penalty") {
+  await addPenalty(text.trim(), selectedModes);
+}
+
+setText("");
+  }}
+>
+  ➕ Додати
+</button>
 
       <div style={{ height: 20 }} />
 

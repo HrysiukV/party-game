@@ -136,7 +136,13 @@ function App() {
   const isMyTurn =
     currentPlayerId === userId;
 
-
+console.log({
+  userId,
+  currentPlayerId,
+  isMyTurn,
+  players,
+  mode,
+});
 
   useRoomListener({
 
@@ -393,9 +399,6 @@ function App() {
         goBack={() =>
           setScreen("room")
         }
-
-
-        mode={mode}
 
       />
 

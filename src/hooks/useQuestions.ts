@@ -20,14 +20,14 @@ export function useQuestions(mode: GameMode) {
     const unsubTruths = onSnapshot(
       query(
         collection(db, "truths"),
-        where("mode", "==", mode)
+        where("modes", "array-contains", mode)
       ),
       (snapshot) => {
         setTruths(
           snapshot.docs.map((doc) => ({
             id: doc.id,
             text: doc.data().text || "",
-            mode: doc.data().mode || "",
+           modes: doc.data().modes || [],
           }))
         );
       }
@@ -37,14 +37,14 @@ export function useQuestions(mode: GameMode) {
     const unsubDares = onSnapshot(
       query(
         collection(db, "dares"),
-        where("mode", "==", mode)
+         where("modes", "array-contains", mode)
       ),
       (snapshot) => {
         setDares(
           snapshot.docs.map((doc) => ({
             id: doc.id,
             text: doc.data().text || "",
-            mode: doc.data().mode || "",
+            modes: doc.data().modes || [],
           }))
         );
       }
@@ -54,14 +54,14 @@ export function useQuestions(mode: GameMode) {
     const unsubPenalties = onSnapshot(
       query(
         collection(db, "penalties"),
-        where("mode", "==", mode)
+         where("modes", "array-contains", mode)
       ),
       (snapshot) => {
         setPenalties(
           snapshot.docs.map((doc) => ({
             id: doc.id,
             text: doc.data().text || "",
-            mode: doc.data().mode || "",
+            modes: doc.data().modes || [],
           }))
         );
       }

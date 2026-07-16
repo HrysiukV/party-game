@@ -99,16 +99,45 @@ export async function removePlayer(
 
   const data = snap.data();
 
-  const players = (data.players || []).filter(
-    (player: any) => player.id !== userId
+  const players = data.players || [];
+
+  const removedIndex = players.findIndex(
+    (p: any) => p.id === userId
   );
 
-  if (players.length === 0) {
+  const newPlayers = players.filter(
+    (p: any) => p.id !== userId
+  );
+
+  // якщо нікого не залишилось — видаляємо кімнату
+  if (newPlayers.length === 0) {
     await deleteDoc(roomRef);
     return;
   }
 
+  let currentPlayerId = data.currentPlayerId;
+
+  // якщо вийшов той, чий зараз хід
+  if (currentPlayerId === userId) {
+    let nextIndex = removedIndex;
+
+    if (nextIndex >= newPlayers.length) {
+      nextIndex = 0;
+    }
+
+    currentPlayerId = newPlayers[nextIndex].id;
+  }
+
+  // якщо вийшов хост — передаємо хоста першому гравцю
+  let hostId = data.hostId;
+
+  if (hostId === userId) {
+    hostId = newPlayers[0].id;
+  }
+
   await updateDoc(roomRef, {
-    players,
+    players: newPlayers,
+    currentPlayerId,
+    hostId,
   });
 }

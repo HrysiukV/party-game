@@ -51,77 +51,53 @@ function Room({
 
           return (
             <div
-              key={mode.id}
-              onClick={() => setSelectedMode(mode.id)}
-              style={{
-                cursor: "pointer",
-                padding: "12px 16px",
-                borderRadius: 14,
+  key={mode.id}
+  onClick={() => setSelectedMode(mode.id)}
+  style={{
+    cursor: "pointer",
+    padding: "14px 18px",
+    borderRadius: 16,
+   border: active
+  ? "2px solid #7c3aed"
+  : "1px solid rgba(255,255,255,.08)",
 
-                border: active
-                  ? "2px solid #7c3aed"
-                  : "1px solid rgba(255,255,255,.08)",
+background: active
+  ? "rgba(124,58,237,.18)"
+  : "rgba(255,255,255,.05)",
+    transition: ".2s",
+    minHeight: 72,
 
-                background: active
-                  ? "rgba(124,58,237,.18)"
-                  : "rgba(255,255,255,.05)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start", // <-- головне
+  }}
+>
+  <div
+    style={{
+      width: "100%",
+      fontWeight: 700,
+      fontSize: 17,
+      lineHeight: 1.2,
+      textAlign: "left", // <-- головне
+    }}
+  >
+    {mode.emoji} {mode.title}
+  </div>
 
-                transition: "all .2s ease",
-
-                transform: active
-                  ? "scale(1.02)"
-                  : "scale(1)",
-
-                boxShadow: active
-                  ? "0 0 18px rgba(124,58,237,.28)"
-                  : "none",
-
-                minHeight: 66,
-
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 22,
-                    width: 28,
-                    textAlign: "center",
-                  }}
-                >
-                  {mode.emoji}
-                </span>
-
-                <span
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 16,
-                  }}
-                >
-                  {mode.title}
-                </span>
-              </div>
-
-              <div
-                style={{
-                  marginTop: 4,
-                  marginLeft: 38,
-                  opacity: 0.65,
-                  fontSize: 12,
-                  lineHeight: 1.3,
-                }}
-              >
-                {mode.description}
-              </div>
-            </div>
+  <div
+    style={{
+      width: "100%",
+      marginTop: 4,
+      opacity: 0.7,
+      fontSize: 13,
+      lineHeight: 1.3,
+      textAlign: "left", // <-- головне
+    }}
+  >
+    {mode.description}
+  </div>
+</div>
           );
         })}
       </div>

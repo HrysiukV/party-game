@@ -10,7 +10,8 @@ type Props = {
   truths: Question[];
   dares: Question[];
   penalties: Question[];
-  userId: string;
+mode: string;
+userId: string;
 
   setCard: React.Dispatch<
  React.SetStateAction<string | null>
@@ -28,6 +29,7 @@ export function useGameActions({
   truths,
   dares,
   penalties,
+  mode,
 }: Props) {
 
 
@@ -65,40 +67,71 @@ export function useGameActions({
   }
 
 
-  async function drawCard() {
-    if (!room) return;
+ async function drawCard(
+  selectedType?: "truth" | "dare"
+) {
+  if (!room) return;
 
+  let type: "truth" | "dare" | "penalty";
 
-    const type =
+  if (mode === "classic") {
+    type =
       Math.random() < 0.5
         ? "truth"
         : "dare";
-
-
-    const list =
-      type === "truth"
-        ? truths
-        : dares;
-
-
-    if (!list.length) return;
-
-
-    const item =
-      list[Math.floor(Math.random() * list.length)];
-
-
-    const text =
-      type === "truth"
-        ? `🧠 ПРАВДА\n\n${item.text}`
-        : `🔥 ДІЯ\n\n${item.text}`;
-
-
-    await updateDoc(doc(db, "rooms", room), {
-      card: text,
-      penalty: null,
-    });
   }
+
+  else if (mode === "choose") {
+    if (!selectedType) return;
+    type = selectedType;
+  }
+
+  else {
+    const random = Math.random();
+
+    if (random < 0.4)
+      type = "truth";
+    else if (random < 0.8)
+      type = "dare";
+    else
+      type = "penalty";
+  }
+
+  const list =
+    type === "truth"
+      ? truths
+      : type === "dare"
+      ? dares
+      : penalties;
+
+  if (!list.length) return;
+
+  const item =
+    list[
+      Math.floor(
+        Math.random() * list.length
+      )
+    ];
+
+  let text = "";
+
+  if (type === "truth") {
+    text = `🧠 ПРАВДА\n\n${item.text}`;
+  }
+
+  if (type === "dare") {
+    text = `🔥 ДІЯ\n\n${item.text}`;
+  }
+
+  if (type === "penalty") {
+    text = `⚠️ ШТРАФ\n\n${item.text}`;
+  }
+
+  await updateDoc(doc(db, "rooms", room), {
+    card: type === "penalty" ? null : text,
+    penalty: type === "penalty" ? text : null,
+  });
+}
 
 
   async function refuse() {

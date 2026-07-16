@@ -103,6 +103,7 @@ function App() {
     truths,
     dares,
     penalties,
+    mode,
 
     userId,
 

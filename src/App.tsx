@@ -12,6 +12,7 @@ import { useRoom } from "./hooks/useRoom";
 import { useQuestions } from "./hooks/useQuestions";
 import { useRoomListener } from "./hooks/useRoomListener";
 import { useGameActions } from "./hooks/useGameActions";
+import { useAllQuestions } from "./hooks/useAllQuestions";
 
 import {
   createRoom as createRoomService,
@@ -79,15 +80,9 @@ function App() {
 
   } = useRoom();
 
+const gameQuestions = useQuestions(mode);
 
-  const {
-    truths,
-    dares,
-    penalties,
-
-  } = useQuestions(mode);
-
-
+const adminQuestions = useAllQuestions();
 
   const {
     startGame,
@@ -100,9 +95,9 @@ function App() {
     players,
     currentPlayerId,
 
-    truths,
-    dares,
-    penalties,
+     truths: gameQuestions.truths,
+  dares: gameQuestions.dares,
+  penalties: gameQuestions.penalties,
     mode,
 
     userId,
@@ -376,11 +371,9 @@ console.log({
 
       <Admin
 
-        truths={truths}
-
-        dares={dares}
-
-        penalties={penalties}
+        truths={adminQuestions.truths}
+dares={adminQuestions.dares}
+penalties={adminQuestions.penalties}
 
 
         addTruth={addTruth}
